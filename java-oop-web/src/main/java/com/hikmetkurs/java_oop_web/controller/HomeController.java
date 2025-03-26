@@ -1,4 +1,4 @@
-package com.hikmetkurs.javaoop.controller;
+package com.hikmetkurs.java_oop_web.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,8 +9,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("title", "Java OOP Öğrenim Platformu");
-        model.addAttribute("welcome", "Java Nesne Yönelimli Programlama kavramlarını öğrenmek için interaktif platformumuza hoş geldiniz!");
-        return "home";
+        model.addAttribute("title", "Java Öğrenim Platformu");
+        model.addAttribute("welcome", "Java ve OOP kavramlarını interaktif bir şekilde öğrenmeye hazır mısınız?");
+        return "home";  // templates/home.html şablonunu kullanacak
     }
 }

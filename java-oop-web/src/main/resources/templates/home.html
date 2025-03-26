@@ -1,91 +1,3240 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html data-theme="javapro" lang="tr" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${title}">Java OOP Öğrenim Platformu</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title th:text="${title}">JavaPro Akademi</title>
+    <meta content="JavaPro Akademi - Java ve OOP kavramlarını profesyonel seviyede öğrenebileceğiniz, kapsamlı bir eğitim platformu."
+          name="description">
+    <meta content="Java, OOP, programlama, eğitim, JavaPro, Akademi" name="keywords">
+    <meta content="JavaPro Akademi" property="og:title">
+    <meta content="Java ve OOP kavramlarını profesyonel seviyede öğrenebileceğiniz platform" property="og:description">
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+          rel="stylesheet">
+    <!-- AOS - Animate On Scroll kütüphanesi -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <!-- Highlight.js - Kod vurgulama kütüphanesi -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/tokyo-night-dark.min.css"
+          rel="stylesheet">
     <style>
-        .jumbotron {
-            padding: 2rem;
-            background-color: #e9ecef;
-            border-radius: .3rem;
-            margin-bottom: 2rem;
+        /* Tema değişkenleri */
+        :root {
+            /* Mavi tema (varsayılan) */
+            --primary: #3f51b5;
+            --primary-dark: #303f9f;
+            --secondary: #ff5722;
+            --light: #f5f7fa;
+            --dark: #1a2138;
+            --success: #4caf50;
+            --info: #03a9f4;
+            --warning: #ff9800;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --background: #ffffff;
+
+            /* Tema geçiş efekti */
+            --transition-time: 0.5s;
         }
+
+        /* Pembe tema */
+        [data-theme="pink"] {
+            --primary: #E83E8C;
+            --primary-dark: #D81B60;
+            --secondary: #00BCD4;
+            --dark: #2E2E3A;
+            --success: #00C851;
+            --info: #33b5e5;
+            --warning: #ffbb33;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --background: #ffffff;
+        }
+
+        /* JavaPro teması */
+        [data-theme="javapro"] {
+            --primary: #2c3e50;
+            --primary-dark: #1a2530;
+            --secondary: #e74c3c;
+            --dark: #2E2E3A;
+            --success: #27ae60;
+            --info: #3498db;
+            --warning: #f39c12;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --background: #ffffff;
+        }
+
+        /* Siyah/Koyu tema için özel ayarlar */
+        [data-theme="dark"] {
+            --primary: #3f51b5;
+            --primary-dark: #303f9f;
+            --secondary: #ff5722;
+            --light: #f5f7fa;
+            --dark: #121212;
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --text-muted: #aaaaaa;
+            --background: #1a1a1a;
+        }
+
+        /* Koyu temada metin renkleri */
+        [data-theme="dark"] body {
+            background-color: #1a1a1a;
+            color: var(--text-primary);
+        }
+
+        [data-theme="dark"] .navbar {
+            background: linear-gradient(135deg, #1a2530, #0f1620);
+        }
+
+        [data-theme="dark"] .hero-section {
+            background: linear-gradient(135deg, rgba(26, 37, 48, 0.95), rgba(15, 22, 30, 0.95)),
+                      url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97') no-repeat center center;
+            background-size: cover;
+        }
+
+        [data-theme="dark"] .hero-title,
+        [data-theme="dark"] .section-title,
+        [data-theme="dark"] h1,
+        [data-theme="dark"] h2,
+        [data-theme="dark"] h3,
+        [data-theme="dark"] h4,
+        [data-theme="dark"] p,
+        [data-theme="dark"] .hero-subtitle,
+        [data-theme="dark"] .hero-description {
+            color: var(--text-primary) !important;
+        }
+
+        [data-theme="dark"] .feature-card {
+            background: #2a2a2a;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        [data-theme="dark"] .feature-card .card-title {
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .feature-card .card-text {
+            color: #cccccc;
+        }
+
+        [data-theme="dark"] .section-subtitle {
+            color: #cccccc;
+        }
+
+        [data-theme="dark"] .testimonial-card {
+            background: #2a2a2a;
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .testimonial-content {
+            color: #e0e0e0;
+        }
+
+        [data-theme="dark"] .steps-section {
+            background-color: #1e1e1e;
+        }
+
+        [data-theme="dark"] .step-content {
+            background: #2a2a2a;
+        }
+
+        [data-theme="dark"] .step-content p {
+            color: #cccccc;
+        }
+
+        [data-theme="dark"] .cert-item {
+            background: #2a2a2a;
+        }
+
+        [data-theme="dark"] .cert-title {
+            color: #ffffff;
+        }
+
+        [data-theme="dark"] .cert-description {
+            color: #cccccc;
+        }
+
+        [data-theme="dark"] .cert-tag {
+            background: #3a3a3a;
+            color: #e0e0e0;
+        }
+
+        /* Renk paleti kontrolü için */
+        .theme-dark {
+            background: linear-gradient(135deg, #1a1a1a, #303030);
+            color: white;
+        }
+
+        /* Tema seçicileri için hover etkisi */
+        .theme-option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Sayfa yükleme animasyonu */
+        .page-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-dark);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        .page-loader.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .loader:before, .loader:after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            animation: pulsOut 1.8s ease-in-out infinite;
+            filter: drop-shadow(0 0 1rem rgba(255, 255, 255, 0.5));
+        }
+
+        .loader:before {
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            animation-name: pulsIn;
+        }
+
+        .loader:after {
+            width: 100%;
+            height: 100%;
+            background: var(--secondary);
+            animation-delay: 0.5s;
+        }
+
+        @keyframes pulsIn {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes pulsOut {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .loader-text {
+            margin-top: 30px;
+            color: white;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Kaydırma göstergesi */
+        .scroll-progress-container {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 5px;
+            background: transparent;
+            z-index: 9000;
+            overflow: hidden;
+        }
+
+        .scroll-progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--warning), var(--secondary));
+            width: 0;
+        }
+
+        /* Tema değiştirici stil */
+        .theme-switcher {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 999;
+            background: white;
+            border-radius: 30px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+            display: flex;
+            overflow: hidden;
+        }
+
+        .theme-option {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .theme-option:hover {
+            transform: scale(1.1);
+        }
+
+        .theme-option.active {
+            border: 2px solid #444;
+        }
+
+        .theme-blue {
+            background: linear-gradient(135deg, #3f51b5, #303f9f);
+            color: white;
+        }
+
+        .theme-pink {
+            background: linear-gradient(135deg, #E83E8C, #D81B60);
+            color: white;
+        }
+
+        .theme-javapro {
+            background: linear-gradient(135deg, #2c3e50, #1a2530);
+            color: white;
+        }
+
+        .theme-dark-btn {
+            background: linear-gradient(135deg, #121212, #2a2a2a);
+            color: white;
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.3s;
+            transform: translateY(20px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 99;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-5px);
+        }
+
+        /* Tüm elementlerde smooth renk geçişi */
+        * {
+            transition: background-color var(--transition-time),
+                        background var(--transition-time),
+                        border-color var(--transition-time),
+                        color var(--transition-time);
+        }
+
+        html {
+            scroll-behavior: smooth; /* Yumuşak kaydırma */
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-primary);
+            background-color: var(--background);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Parçacık konteyner */
+        .particle-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* Navbar */
+        .navbar {
+            padding: 15px 0;
+            background: linear-gradient(135deg, #2c3e50, #1a2530);
+            box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+            z-index: 1000;
+            position: fixed;
+            width: 100%;
+            top: 0;
+        }
+
+        .navbar.scrolled {
+            padding: 10px 0;
+            background: rgba(44, 62, 80, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: white;
+        }
+
+        .navbar-brand i {
+            margin-right: 8px;
+            font-size: 2rem;
+            color: #e74c3c;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s;
+            color: white !important;
+            position: relative;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: white;
+            bottom: 0;
+            left: 50%;
+            transition: all 0.3s;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover:after,
+        .nav-link.active:after {
+            width: 100%;
+        }
+
+        .nav-link.btn-light {
+            color: var(--primary) !important;
+            border-radius: 50px;
+        }
+
+        .nav-link.btn-light:after {
+            display: none;
+        }
+
+        /* Dil değiştirici */
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+
+        .language-option {
+            padding: 3px 8px;
+            margin: 0 3px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .language-option:hover {
+            opacity: 0.9;
+            transform: translateY(-3px);
+        }
+
+        .language-option.active {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .language-option img {
+            width: 18px;
+            height: 18px;
+            margin-right: 5px;
+            border-radius: 2px;
+        }
+
+        .search-box {
+            position: relative;
+            margin-right: 15px;
+        }
+
+        .search-box input {
+            padding: 8px 15px 8px 35px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+            width: 180px;
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            opacity: 0.7;
+        }
+
+        .search-box input:focus {
+            background: rgba(255, 255, 255, 0.25);
+            width: 220px;
+            outline: none;
+        }
+
+        /* Pro Badge */
+        .pro-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            margin-left: 5px;
+            vertical-align: middle;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Notification Bell */
+        .notification-bell {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            margin: 0 15px;
+            cursor: pointer;
+        }
+
+        .notification-bell i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .notification-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .notification-bell:hover i {
+            animation: bellRing 0.7s ease;
+        }
+
+        @keyframes bellRing {
+            0%, 100% { transform: rotate(0); }
+            20%, 60% { transform: rotate(15deg); }
+            40%, 80% { transform: rotate(-15deg); }
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            padding: 180px 0 120px;
+            background: linear-gradient(135deg, rgba(44, 62, 80, 0.95), rgba(26, 37, 48, 0.95)),
+                      url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97') no-repeat center center;
+            background-size: cover;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        [data-theme="pink"] .hero-section {
+            background: linear-gradient(135deg, rgba(232, 62, 140, 0.95), rgba(216, 27, 96, 0.95)),
+                        url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97') no-repeat center center;
+            background-size: cover;
+        }
+
+        [data-theme="blue"] .hero-section {
+            background: linear-gradient(135deg, rgba(63, 81, 181, 0.95), rgba(48, 63, 159, 0.95)),
+                        url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97') no-repeat center center;
+            background-size: cover;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(90deg, #ffffff, #e0e0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            position: relative;
+        }
+
+        .hero-title::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--secondary);
+        }
+
+        .hero-subtitle {
+            font-size: 1.7rem;
+            font-weight: 300;
+            line-height: 1.4;
+            margin-bottom: 2rem;
+            color: white;
+        }
+
+        .hero-description {
+            font-size: 1.15rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            max-width: 580px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .btn-hero {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            background: var(--secondary);
+            color: white;
+            border: none;
+        }
+
+        .btn-hero:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            z-index: -1;
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            color: white;
+        }
+
+        .btn-hero:hover:before {
+            width: 100%;
+        }
+
+        .hero-badges {
+            display: flex;
+            margin-top: 2rem;
+            gap: 20px;
+        }
+
+        .hero-badge {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            padding: 8px 15px;
+            color: white;
+        }
+
+        .hero-badge i {
+            margin-right: 8px;
+            color: var(--secondary);
+        }
+
+        /* Code graphic - İyileştirilmiş Sürüm */
+        .code-graphic {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 520px;
+            height: 380px;
+            background: rgba(0, 0, 0, 0.85);
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            z-index: 5;
+            display: block !important;
+            opacity: 1 !important;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .code-graphic:hover {
+            transform: translateY(-50%) perspective(1000px) rotateY(-5deg) rotateX(2deg);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+        }
+
+        .code-header {
+            padding: 12px 20px;
+            background-color: #2d2d2d;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .code-header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .code-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .code-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red {
+            background: #ff5f56;
+        }
+
+        .dot-yellow {
+            background: #ffbd2e;
+        }
+
+        .dot-green {
+            background: #27c93f;
+        }
+
+        .code-title {
+            margin-left: 15px;
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            font-weight: 500;
+        }
+
+        .code-header-right {
+            display: flex;
+            gap: 10px;
+        }
+
+        .code-action {
+            color: rgba(255,255,255,0.5);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .code-action:hover {
+            color: rgba(255,255,255,0.9);
+        }
+
+        .code-editor {
+            padding: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            display: block !important;
+            overflow: auto;
+            height: calc(100% - 45px);
+        }
+
+        .code-line {
+            line-height: 1.6;
+            margin-bottom: 4px;
+            font-size: 14px;
+            white-space: pre;
+            color: #e0e0e0;
+            display: flex;
+        }
+
+        /* Kod renklerini belirgin hale getirme */
+        .keyword {
+            color: #ff9800;
+            font-weight: bold;
+        }
+
+        .class {
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .string {
+            color: #f44336;
+        }
+
+        .comment {
+            color: #6A9955;
+            font-style: italic;
+        }
+
+        .typing {
+            border-right: 2px solid #ff5722;
+        }
+
+        .line-number {
+            color: rgba(255,255,255,0.3);
+            width: 30px;
+            text-align: right;
+            padding-right: 15px;
+            margin-right: 10px;
+            user-select: none;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .active-line {
+            background: rgba(255,255,255,0.08);
+            border-radius: 4px;
+        }
+
+        .typing {
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: 2px solid var(--secondary);
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--secondary) }
+        }
+
+        /* Code preview enhancements */
+        .code-preview {
+            position: absolute;
+            right: 5%;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 520px;
+            height: 380px;
+            z-index: 4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .code-result {
+            width: 80%;
+            height: auto;
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: -40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .code-graphic:hover + .code-preview .code-result {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .code-result-title {
+            font-size: 14px;
+            color: white;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .code-result-content {
+            background: #121212;
+            padding: 10px;
+            border-radius: 5px;
+            color: #4caf50;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        /* 3D Kart - Geliştirilen Feature Cards */
+        .feature-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            height: 100%;
+            background: white;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-15px) rotateX(10deg);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .feature-card:hover .card-icon {
+            transform: translateZ(30px) scale(1.2);
+            filter: brightness(1.1);
+        }
+
+        .feature-card:hover .card-title {
+            transform: translateZ(20px);
+            color: var(--primary);
+        }
+
+        .feature-card:hover .card-text {
+            transform: translateZ(15px);
+        }
+
+        .feature-card:hover .btn {
+            transform: translateZ(25px) scale(1.05);
+        }
+
+        .card-body {
+            padding: 2.5rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .card-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 2rem;
+            border-radius: 50%;
+            font-size: 2.5rem;
+            color: white;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .card-java {
+            background: linear-gradient(135deg, var(--info), #0288d1);
+        }
+
+        .card-oop {
+            background: linear-gradient(135deg, var(--success), #2e7d32);
+        }
+
+        .card-examples {
+            background: linear-gradient(135deg, var(--warning), #e65100);
+        }
+
+        .feature-card .card-title {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: var(--dark);
+        }
+
+        .feature-card .card-text {
+            color: #666;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            margin-bottom: 1.8rem;
+            line-height: 1.6;
+        }
+
+        .feature-card .btn {
+            border-radius: 30px;
+            padding: 10px 30px;
+            font-weight: 500;
+            display: block;
+            margin: 0 auto;
+            width: fit-content;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .feature-card .btn:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: -100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0.2), transparent);
+            transition: all 0.5s;
+            z-index: -1;
+        }
+
+        .feature-card .btn:hover:after {
+            left: 100%;
+        }
+
+        /* Features section */
+        .features-section {
+            padding: 120px 0;
+            position: relative;
+            background: var(--background);
+        }
+
+        .section-heading {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 70px;
+            height: 4px;
+            background: var(--secondary);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 1.5rem auto 0;
+            line-height: 1.6;
+        }
+
+        /* Sosyal Kanıt Bölümü */
+        .testimonials-section {
+            padding: 100px 0;
+            background: var(--light);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: 15px;
+            padding: 35px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+            margin: 20px 15px;
+            position: relative;
+            transition: all 0.4s;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .testimonial-card:before {
+            content: '\201C';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 5rem;
+            color: rgba(0,0,0,0.05);
+            font-family: Georgia, serif;
+            line-height: 1;
+        }
+
+        .testimonial-content {
+            font-style: italic;
+            margin-bottom: 25px;
+            color: #555;
+            position: relative;
+            z-index: 1;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 3px solid white;
+        }
+
+        .author-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .author-info h4 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .author-info p {
+            margin: 5px 0 0;
+            font-size: 0.95rem;
+            color: #777;
+        }
+
+        .testimonial-rating {
+            color: #ffc107;
+            margin-top: 8px;
+            font-size: 1rem;
+        }
+
+        /* Sertifikalar ve Başarı Rozetleri Bölümü */
+        .certifications-section {
+            padding: 120px 0;
+            position: relative;
+            background: linear-gradient(to right, #f5f7fa, #c3cfe2);
+        }
+
+        .cert-container {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .btn-light {
+            font-weight: 600;
+            padding: 12px 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 30px;
+            transition: all 0.3s;
+        }
+
+        .btn-light:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .cert-item {
+            width: 280px;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cert-item:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+
+        .cert-icon {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 25px;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            color: var(--primary);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: all 0.4s;
+        }
+
+        .cert-item:hover .cert-icon {
+            transform: scale(1.1);
+            color: var(--secondary);
+        }
+
+        .cert-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .cert-description {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .cert-tag {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--light);
+            color: var(--dark);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .cert-ribbon {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            overflow: hidden;
+        }
+
+        .cert-ribbon-inner {
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform: translate(50%, -50%) rotate(45deg);
+            transform-origin: bottom right;
+            width: 200px;
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 8px 0;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Learning Steps Section */
+        .steps-section {
+            background-color: var(--light);
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 4rem;
+            transition: all 0.4s;
+        }
+
+        .step-item:hover .step-number {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-right: 2rem;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .step-number:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: inherit;
+            z-index: -1;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            70% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .step-content {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 30px;
+            flex: 1;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            transition: all 0.4s;
+        }
+
+        .step-item:hover .step-content {
+            transform: translateX(15px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .step-content h3 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: var(--primary);
+        }
+
+        .step-content p {
+            color: #666;
+            margin: 0;
+            line-height: 1.6;
+            font-size: 1.05rem;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-section:before {
+            content: '';
+            position: absolute;
+            width: 150%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB2aWV3Qm94PSIwIDAgMTI4MCAxNDAiIHByZXNlcnZlQXNwZWN0UmF0aW89Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjEpIj48cGF0aCBkPSJNMTI4MCAwTDY0MCA3MCAwIDB2MTQwbDY0MC03MCAxMjgwIDBWMHoiLz48L2c+PC9zdmc+');
+            background-size: cover;
+            top: 0;
+            left: -25%;
+            animation: wave 15s linear infinite;
+            opacity: 0.2;
+        }
+
+        @keyframes wave {
+            0% {transform: translateX(0) translateY(0) scaleY(1)}
+            50% {transform: translateX(-25%) translateY(10px) scaleY(0.9)}
+            100% {transform: translateX(-50%) translateY(0) scaleY(1)}
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 40px 25px;
+            position: relative;
+            z-index: 1;
+            transition: all 0.4s;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-15px);
+        }
+
+        .stat-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            background: linear-gradient(90deg, #fff, #f0f8ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 1.3rem;
+            font-weight: 300;
+            line-height: 1.4;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 100px 0 30px;
+            position: relative;
+        }
+
+        .footer-brand {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .footer-brand i {
+            color: var(--secondary);
+            margin-right: 10px;
+        }
+
+        .footer-description {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        .footer-heading {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1.8rem;
+            position: relative;
+            padding-bottom: 12px;
+            color: white;
+        }
+
+        .footer-heading:after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 3px;
+            background: var(--secondary);
+            bottom: 0;
+            left: 0;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.9rem;
+            transition: all 0.3s;
+        }
+
+        .footer-links li:hover {
+            transform: translateX(8px);
+        }
+
+        .footer-links a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            padding-left: 18px;
+            font-size: 1.05rem;
+        }
+
+        .footer-links a:before {
+            content: '\f105';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            top: 2px;
+            color: var(--secondary);
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            transition: all 0.3s;
+        }
+
+        .social-link:hover {
+            background: var(--secondary);
+            transform: translateY(-8px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 25px;
+            margin-top: 70px;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        /* Login Modal */
+        .login-modal .modal-content {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+        }
+
+        .login-modal .modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            padding: 25px 35px;
+        }
+
+        .login-modal .modal-title {
+            font-weight: 600;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .login-modal .modal-title i {
+            margin-right: 12px;
+            font-size: 1.8rem;
+            color: var(--secondary);
+        }
+
+        .login-modal .btn-close {
+            color: white;
+            opacity: 0.8;
+            background: transparent;
+            font-size: 1.5rem;
+        }
+
+        .login-modal .modal-body {
+            padding: 35px;
+        }
+
+        .login-form label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-size: 1.05rem;
+        }
+
+        .login-form .form-control {
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 25px;
+            font-size: 1.05rem;
+            transition: all 0.3s;
+        }
+
+        .login-form .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0,0,0,0.05);
+        }
+
+        .login-form .btn-login {
+            background: var(--primary);
+            color: white;
+            border-radius: 50px;
+            padding: 12px 30px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .login-form .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            background: var(--primary-dark);
+        }
+
+        .login-divider {
+            text-align: center;
+            position: relative;
+            margin: 30px 0;
+        }
+
+        .login-divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            z-index: 1;
+            color: #777;
+            font-weight: 500;
+        }
+
+        .login-divider:before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            background: #ddd;
+            top: 50%;
+            left: 0;
+        }
+
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .social-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s;
+            font-size: 1.05rem;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .social-btn i {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .btn-google {
+            background: #DB4437;
+        }
+
+        .btn-github {
+            background: #333;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 25px;
+            color: #777;
+            font-size: 1rem;
+        }
+
+        .login-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .login-footer a:hover {
+            color: var(--secondary);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animated {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .delay-1 {
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .delay-2 {
+            animation-delay: 0.4s;
+            opacity: 0;
+        }
+
+        .delay-3 {
+            animation-delay: 0.6s;
+            opacity: 0;
+        }
+
+        /* X (Twitter) Icon */
+        .x-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* Ekstra yeni özellikler */
+        .floating-cta {
+            position: fixed;
+            right: 20px;
+            bottom: 150px;
+            z-index: 99;
+        }
+
+        .floating-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .floating-button:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+        }
+
+        .floating-menu {
+            position: absolute;
+            right: 0;
+            bottom: 75px;
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            width: 280px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            visibility: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+        }
+
+        .floating-button.active + .floating-menu {
+            visibility: visible;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .floating-menu-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .floating-menu-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .floating-menu-option {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-radius: 10px;
+            background: #f5f7fa;
+            color: var(--dark);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .floating-menu-option:hover {
+            background: var(--light);
+            transform: translateX(5px);
+        }
+
+        .floating-menu-option i {
+            margin-right: 10px;
+            color: var(--secondary);
+            font-size: 1.2rem;
+        }
+
+        /* Yeni Pro Version Badge */
+        .pro-version-badge {
+            position: absolute;
+            top: 120px;
+            right: 30px;
+            background: linear-gradient(135deg, #ff9800, #ff5722);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 30px;
+            box-shadow: 0 5px 15px rgba(255, 87, 34, 0.3);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            transform: rotate(5deg);
+        }
+
+        .pro-version-badge i {
+            margin-right: 8px;
+        }
+
+        /* Kurs kataloğu butonu */
+        .catalog-btn {
+            position: fixed;
+            left: 30px;
+            bottom: 30px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            z-index: 99;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .catalog-btn:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+            color: white;
+        }
+
+        .catalog-btn i {
+            margin-right: 10px;
+            font-size: 1.3rem;
+        }
+
+@media (max-width: 991.98px) {
+    .navbar {
+        padding: 10px 0;
+    }
+
+    .hero-section {
+        padding: 140px 0 80px;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.4rem;
+    }
+
+    .code-graphic {
+        position: relative;
+        right: auto;
+        top: auto;
+        transform: none;
+        margin: 50px auto 30px;
+        width: 90%;
+        max-width: 480px;
+        height: 350px;
+    }
+
+    .code-graphic:hover {
+        transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+    }
+
+    .code-preview {
+        display: none;
+    }
+
+    .hero-section {
+        padding-bottom: 80px;
+    }
+
+    .pro-version-badge {
+        top: 80px;
+        right: 20px;
+    }
+
+    .floating-cta, .catalog-btn {
+        display: none;
+    }
+
+    .search-box {
+        display: none;
+    }
+
+    .language-switcher {
+        margin-left: 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-description {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+    }
+
+    .cert-item {
+        width: 100%;
+    }
+
+    .step-item {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .step-number {
+        margin-right: 0;
+        margin-bottom: 1.5rem;
+    }
+
+    .step-item:hover .step-content {
+        transform: translateY(10px);
+    }
+
+    .testimonial-card {
+        padding: 25px;
+    }
+}
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<!-- Sayfa Yükleme Animasyonu -->
+<div class="page-loader">
+    <div class="loader"></div>
+    <div class="loader-text" data-i18n="loader.text">JavaPro Akademi Yükleniyor...</div>
+</div>
+
+<!-- Kaydırma Göstergesi -->
+<div class="scroll-progress-container">
+    <div class="scroll-progress-bar"></div>
+</div>
+
+<!-- Back to Top Button -->
+<div class="back-to-top" title="Yukarı Çık">
+    <i class="fas fa-chevron-up"></i>
+</div>
+
+<!-- Pro Version Badge -->
+<div class="pro-version-badge">
+    <i class="fas fa-award"></i> PRO Sürüm 2025
+</div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container">
-        <a class="navbar-brand" href="/">Java OOP Öğrenim</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <a class="navbar-brand" href="/">
+            <i class="fab fa-java"></i> JavaPro <span class="fw-light">Akademi</span>
+        </a>
+        <button class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <div class="search-box ms-auto me-3 d-none d-lg-block">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="" aria-label="Arama">
+            </div>
+            <ul class="navbar-nav align-items-center">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Ana Sayfa</a>
+                    <a class="nav-link active" data-i18n="navbar.home" href="/">Ana Sayfa</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/topics">Konular</a>
+                    <a class="nav-link" data-i18n="navbar.topics" href="/topics">Konular</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/quiz">Test</a>
+                    <a class="nav-link" data-i18n="navbar.quiz" href="/quiz">Quiz</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/progress">İlerleme</a>
+                    <a class="nav-link" href="/forum">Forum <span class="pro-badge">YENİ</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-i18n="navbar.progress" href="/progress">İlerleme</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-light rounded-pill px-3 py-2" data-bs-target="#loginModal" data-bs-toggle="modal" href="#">
+                        <i class="fas fa-user me-1"></i> <span data-i18n="navbar.login">Giriş</span>
+                    </a>
+                </li>
+                <!-- Dil seçici taşındı -->
+                <li class="nav-item language-switcher">
+                    <div class="language-option active" data-lang="tr">
+                        <img alt="Türkçe"
+                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDgwMCI+PHBhdGggZmlsbD0iI2UzMGExNyIgZD0iTTAgMGgxMjAwdjgwMEgweiIvPjxjaXJjbGUgY3g9IjQyNSIgY3k9IjQwMCIgcj0iMjAwIiBmaWxsPSIjZmZmIi8+PGNpcmNsZSBjeD0iNDc1IiBjeT0iNDAwIiByPSIxNjAiIGZpbGw9IiNlMzBhMTciLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJtNTgzLjMzNCAzNDAgMS4zOTkgNDIuOTM0IDM4LjY1MS0xOS4yNDctMjQuNzAyIDM2LjMwMyAzOS42MTctMTguMjAyLTQxLjkwMSAxMC42OTcgMjQuMTUyIDM2LjYyOC00MS43ODktMTEuMjQ5LjI4NSA0My4yMjQtMjYuMjA1LTM1LjMxNS0yNS40NzkgMzUuODI2LjI4NC00My4yMjQtNDEuNzg5IDExLjI0OSAyNC4xNTMtMzYuNjI4LTQxLjkwMS0xMC42OTcgMzkuNjE3IDE4LjIwMi0yNC43MDItMzYuMzAzIDM4LjY1MSAxOS4yNDcgMS4zOTktNDIuOTM0eiIvPjwvc3ZnPg==">
+                        TR
+                    </div>
+                    <div class="language-option" data-lang="en">
+                        <img alt="English"
+                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjM1IDY1MCIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgo8ZGVmcz4KPGc+CjxnIGlkPSJ1bmlvbiI+PHBhdGggZD0iTTAsMCBMNTAsMCBMNTAsMzAgTDAsMzAiIGlkPSJ4MUYiIGZpbGw9IiNiZjAwMzQiLz48cGF0aCBkPSJNMCwwIEw1MCwwIEw1MCwzMCBMMCwzMCIgaWQ9IngyRiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik0wLDAgTDUwLDAgTDUwLDMwIEwwLDMwIiBpZD0ieDNGIiBmaWxsPSIjMDAyZDc3Ii8+PC9nPgo8L2c+CjwvZGVmcz4KCjxwYXRoIGQ9Ik0wLDAgTDEyMzUsMCBMMTIzNSw2NTAgTDAsNjUwIHoiIGZpbGw9IiNmZmZmZmYiLz4KPHVzZSB4bGluazpocmVmPSIjeDNGIiB5PSI0MCIvPgo8dXNlIHhsaW5rOmhyZWY9IiN4MkYiIHk9IjcwIi8+Cjx1c2UgeGxpbms6aHJlZj0iIyMzRiIgeT0iMTAwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMTMwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iMTYwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMTkwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iMjIwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMjUwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iMjgwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMzEwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iMzQwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMzcwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iNDAwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iNDMwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iNDYwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iNDkwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iNTIwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iNTUwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iNTgwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iNjEwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gxRiIgd2lkdGg9IjQ5NCIgaGVpZ2h0PSIzNTAiLz4KPHBhdGggc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEwMCIgZD0iTTAsMCBMNDk0LDM1MCIgLz4KPHBhdGggc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEwMCIgZD0iTTAsMzUwIEw0OTQsMCIgLz4KPC9zdmc+Cg==">
+                        EN
+                    </div>
+                </li>
+                <li class="nav-item notification-bell d-none d-lg-block">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">3</span>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="container mt-4">
-    <div class="jumbotron">
-        <h1 class="display-4" th:text="${title}">Java OOP Öğrenim Platformu</h1>
-        <p class="lead" th:text="${welcome}">Hoş geldiniz!</p>
-        <hr class="my-4">
-        <p>Bu platform, Java ve Nesne Yönelimli Programlama kavramlarını interaktif bir şekilde öğrenmenize yardımcı olmak için tasarlanmıştır.</p>
-        <a class="btn btn-primary btn-lg" href="/topics" role="button">Öğrenmeye Başla</a>
+<!-- Hero Section -->
+<section class="hero-section" id="home">
+    <div class="particle-container" id="particles-js"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 hero-content">
+                <h1 class="hero-title" data-aos="fade-up" data-i18n="hero.title">JavaPro Akademi</h1>
+                <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100" data-i18n="hero.subtitle">Profesyonel Java Geliştiricisi Olmanın En Etkili Yolu</p>
+                <p class="hero-description" data-aos="fade-up" data-aos-delay="200" data-i18n="hero.description">
+                    JavaPro Akademi, Java programlama dilini ve nesne yönelimli programlama (OOP) kavramlarını en modern ve interaktif yöntemlerle öğrenmenizi sağlayan kapsamlı bir eğitim platformudur. Sektör deneyimli uzmanlar tarafından hazırlanan içeriklerle, teorik bilgiyi pratik uygulamalarla pekiştirin.
+                </p>
+                <a class="btn btn-hero" data-aos="fade-up" data-aos-delay="300" href="/topics">
+                    <i class="fas fa-rocket me-2"></i> <span data-i18n="hero.startLearning">Öğrenmeye Başla</span>
+                </a>
+
+                <div class="hero-badges">
+                    <div class="hero-badge">
+                        <i class="fas fa-certificate"></i> Sertifikalı Eğitim
+                    </div>
+                    <div class="hero-badge">
+                        <i class="fas fa-users"></i> 10.000+ Öğrenci
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="row">
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Java Temelleri</h5>
-                    <p class="card-text">Veri tipleri, operatörler, kontrol yapıları, döngüler ve diziler hakkında bilgi edinin.</p>
-                    <a href="/topics/basics" class="btn btn-outline-primary">Keşfet</a>
+    <!-- Enhanced Code graphic -->
+    <div class="code-graphic d-none d-lg-block" data-aos="fade-left" data-aos-delay="400">
+        <div class="code-header">
+            <div class="code-header-left">
+                <div class="code-dots">
+                    <div class="code-dot dot-red"></div>
+                    <div class="code-dot dot-yellow"></div>
+                    <div class="code-dot dot-green"></div>
+                </div>
+                <div class="code-title">JavaProExample.java</div>
+            </div>
+            <div class="code-header-right">
+                <div class="code-action"><i class="fas fa-copy"></i></div>
+                <div class="code-action"><i class="fas fa-expand"></i></div>
+            </div>
+        </div>
+        <div class="code-editor">
+            <div class="code-line"><span class="line-number">01</span> <span class="comment">// JavaPro Akademi - Örnek OOP Kodu</span></div>
+            <div class="code-line"><span class="line-number">02</span> <span class="keyword">package</span> com.javapro.examples;</div>
+            <div class="code-line"><span class="line-number">03</span> </div>
+            <div class="code-line"><span class="line-number">04</span> <span class="keyword">import</span> java.util.ArrayList;</div>
+            <div class="code-line"><span class="line-number">05</span> <span class="keyword">import</span> java.util.List;</div>
+            <div class="code-line"><span class="line-number">06</span> </div>
+            <div class="code-line"><span class="line-number">07</span> <span class="keyword">public class</span> <span class="class">Course</span> {</div>
+            <div class="code-line"><span class="line-number">08</span>     <span class="keyword">private</span> String title;</div>
+            <div class="code-line"><span class="line-number">09</span>     <span class="keyword">private</span> String description;</div>
+            <div class="code-line"><span class="line-number">10</span>     <span class="keyword">private</span> List&lt;Module&gt; modules = <span class="keyword">new</span> ArrayList&lt;&gt;();</div>
+            <div class="code-line"><span class="line-number">11</span> </div>
+            <div class="code-line"><span class="line-number">12</span>     <span class="keyword">public</span> Course(String title, String description) {</div>
+            <div class="code-line"><span class="line-number">13</span>         this.title = title;</div>
+            <div class="code-line"><span class="line-number">14</span>         this.description = description;</div>
+            <div class="code-line"><span class="line-number">15</span>     }</div>
+            <div class="code-line"><span class="line-number">16</span> </div>
+            <div class="code-line active-line"><span class="line-number">17</span>     <span class="keyword">public void</span> addModule(Module module) {</div>
+            <div class="code-line"><span class="line-number">18</span>         modules.add(module);</div>
+            <div class="code-line"><span class="line-number">19</span>         System.out.println(<span class="string">"Module added: "</span> + module.getTitle());</div>
+            <div class="code-line"><span class="line-number">20</span>     }</div>
+            <div class="code-line"><span class="line-number">21</span> </div>
+            <div class="code-line"><span class="line-number">22</span>     <span class="keyword">public void</span> startCourse() {</div>
+            <div class="code-line"><span class="line-number">23</span>         System.out.println(<span class="string">"Starting course: "</span> + title);</div>
+            <div class="code-line typing"><span class="line-number">24</span>         modules.forEach(Module::start);</div>
+        </div>
+    </div>
+
+    <div class="code-preview">
+        <div class="code-result">
+            <div class="code-result-title">Konsol Çıktısı</div>
+            <div class="code-result-content">
+                > Module added: Java Temelleri<br>
+                > Starting course: JavaPro OOP
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Floating Action Button -->
+<div class="floating-cta">
+    <div class="floating-button" id="floatingButton">
+        <i class="fas fa-headset"></i>
+    </div>
+    <div class="floating-menu">
+        <div class="floating-menu-title">Size nasıl yardımcı olabiliriz?</div>
+        <div class="floating-menu-options">
+            <a href="#" class="floating-menu-option">
+                <i class="fas fa-question-circle"></i> Canlı Destek
+            </a>
+            <a href="#" class="floating-menu-option">
+                <i class="fas fa-envelope"></i> E-posta Gönder
+            </a>
+            <a href="#" class="floating-menu-option">
+                <i class="fas fa-book"></i> SSS
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Kurs Kataloğu Butonu -->
+<a href="/catalog" class="catalog-btn">
+    <i class="fas fa-book-open"></i> Kurs Kataloğu
+</a>
+
+<!-- Features Section -->
+<section class="features-section" id="features">
+    <div class="container">
+        <div class="section-heading">
+            <h2 class="section-title" data-aos="fade-up" data-i18n="features.title">Neler Öğreneceksiniz?</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100" data-i18n="features.subtitle">
+                Kapsamlı içerik, uygulamalı örnekler ve interaktif testlerle Java programlama ve OOP dünyasında uzmanlaşın. Modern yazılım geliştirme pratikleriyle endüstri standardında kod yazmayı öğrenin.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="card feature-card">
+                    <div class="card-body p-4">
+                        <div class="card-icon card-java">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3 class="card-title" data-i18n="features.card1.title">Java Temelleri</h3>
+                        <p class="card-text" data-i18n="features.card1.text">
+                            Syntax, veri tipleri, operatörler, kontrol yapıları, döngüler, diziler ve koleksiyonlar hakkında kapsamlı bilgi edinirken, temel algoritma mantığını güçlendirin.
+                        </p>
+                        <a class="btn btn-outline-primary" href="/topics/basics">
+                            <span data-i18n="features.explore">Keşfet</span> <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="card feature-card">
+                    <div class="card-body p-4">
+                        <div class="card-icon card-oop">
+                            <i class="fas fa-cubes"></i>
+                        </div>
+                        <h3 class="card-title" data-i18n="features.card2.title">OOP Kavramları</h3>
+                        <p class="card-text" data-i18n="features.card2.text">
+                            Nesne yönelimli programlamanın temel taşları olan sınıflar, nesneler, kalıtım, polimorfizm, kapsülleme ve arayüzleri uygulamalı olarak öğrenin.
+                        </p>
+                        <a class="btn btn-outline-success" href="/topics/oop">
+                            <span data-i18n="features.explore">Keşfet</span> <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="card feature-card">
+                    <div class="card-body p-4">
+                        <div class="card-icon card-examples">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3 class="card-title" data-i18n="features.card3.title">İleri Java & Projeler</h3>
+                        <p class="card-text" data-i18n="features.card3.text">
+                            Gerçek dünya uygulamaları ile öğrendiklerinizi pratiğe dökün. Sektörde kullanılan modern Java uygulamaları geliştirmeyi ve çözüm odaklı düşünmeyi öğrenin.
+                        </p>
+                        <a class="btn btn-outline-warning" href="/topics/examples">
+                            <span data-i18n="features.explore">Keşfet</span> <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">OOP Kavramları</h5>
-                    <p class="card-text">Sınıflar, nesneler, kalıtım, polimorfizm, kapsülleme ve arayüzler hakkında öğrenin.</p>
-                    <a href="/topics/oop" class="btn btn-outline-primary">Keşfet</a>
+    </div>
+</section>
+
+<!-- Sosyal Kanıt Bölümü (YENİ) -->
+<section class="testimonials-section" id="testimonials">
+    <div class="container">
+        <div class="section-heading">
+            <h2 class="section-title" data-aos="fade-up" data-i18n="testimonials.title">Öğrencilerimizin Deneyimleri</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100" data-i18n="testimonials.subtitle">
+                JavaPro Akademi'nin eğitim metodolojisi ve içeriği hakkında mezunlarımızın gerçek başarı hikayeleri.
+            </p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="testimonial-card">
+                    <div class="testimonial-content" data-i18n="testimonials.testimonial1">
+                        "JavaPro Akademi ile Java öğrenmek çok farklı bir deneyim oldu. Özellikle pratik-ağırlıklı yaklaşımları ve gerçek projelerle çalışma imkanı sunmaları beni yazılım kariyerimde bir adım öne çıkardı. 3 aylık eğitim sürecinin sonunda bir yazılım firmasında işe başladım!"
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img alt="Ayşe Yılmaz" src="https://randomuser.me/api/portraits/women/44.jpg">
+                        </div>
+                        <div class="author-info">
+                            <h4 data-i18n="testimonials.author1.name">Ayşe Yılmaz</h4>
+                            <p data-i18n="testimonials.author1.title">Jr. Backend Developer @ TechSoft</p>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="testimonial-card">
+                    <div class="testimonial-content" data-i18n="testimonials.testimonial2">
+                        "Daha önce birçok online kursu denedim, ancak hiçbiri JavaPro Akademi kadar kapsamlı ve interaktif değildi. Adım adım ilerleyen müfredat ve canlı mentörlük seansları sayesinde zorlandığım konuları hızla aştım. Şimdi kendi projelerimde Java ve Spring Boot kullanıyorum."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img alt="Mehmet Kaya" src="https://randomuser.me/api/portraits/men/32.jpg">
+                        </div>
+                        <div class="author-info">
+                            <h4 data-i18n="testimonials.author2.name">Mehmet Kaya</h4>
+                            <p data-i18n="testimonials.author2.title">Fullstack Developer</p>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="400">
+                <div class="testimonial-card">
+                    <div class="testimonial-content" data-i18n="testimonials.testimonial3">
+                        "Üniversitedeki teorik Java derslerini anlamakta zorlanıyordum. JavaPro Akademi'nin görsel ve uygulamalı yaklaşımı sayesinde not ortalamam yükseldi ve staj döneminde diğer adaylardan bir adım öne çıktım. Akademik başarımın yanında iş dünyasına hazır hissediyorum."
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img alt="Zeynep Demir" src="https://randomuser.me/api/portraits/women/68.jpg">
+                        </div>
+                        <div class="author-info">
+                            <h4 data-i18n="testimonials.author3.name">Zeynep Demir</h4>
+                            <p data-i18n="testimonials.author3.title">Bilgisayar Müh. Öğrencisi</p>
+                            <div class="testimonial-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Pratik Örnekler</h5>
-                    <p class="card-text">Gerçek dünya uygulamalarıyla OOP kavramlarını pekiştirin ve uygulayın.</p>
-                    <a href="/topics/examples" class="btn btn-outline-primary">Keşfet</a>
+    </div>
+</section>
+
+<!-- Sertifikalar ve Başarı Rozetleri Bölümü (YENİ) -->
+<section class="certifications-section" id="certifications">
+    <div class="container">
+        <div class="section-heading">
+            <h2 class="section-title" data-aos="fade-up" data-i18n="certifications.title">Sertifikalar ve Başarı Rozetleri</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100" data-i18n="certifications.subtitle">
+                JavaPro Akademi'de edindiğiniz becerileri belgeleyen ve kariyer yolculuğunuzda sizi öne çıkaracak endüstri onaylı sertifikalar kazanın.
+            </p>
+        </div>
+
+        <div class="cert-container">
+            <div class="cert-item" data-aos="fade-up" data-aos-delay="200">
+                <div class="cert-icon">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <h3 class="cert-title" data-i18n="certifications.cert1.title">Java Temel Sertifikası</h3>
+                <p class="cert-description" data-i18n="certifications.cert1.description">
+                    Java programlama dilinin temel yapılarını ve kullanımını başarıyla öğrendiğinizi belgeleyen, CV'nizde fark yaratacak sertifika.
+                </p>
+                <div>
+                    <span class="cert-tag" data-i18n="certifications.cert1.tag1">Core Java</span>
+                    <span class="cert-tag" data-i18n="certifications.cert1.tag2">Temel Seviye</span>
+                </div>
+                <div class="cert-ribbon">
+                    <div class="cert-ribbon-inner" data-i18n="certifications.popular">POPÜLER</div>
+                </div>
+            </div>
+
+            <div class="cert-item" data-aos="fade-up" data-aos-delay="300">
+                <div class="cert-icon">
+                    <i class="fas fa-award"></i>
+                </div>
+                <h3 class="cert-title" data-i18n="certifications.cert2.title">OOP Uzman Sertifikası</h3>
+                <p class="cert-description" data-i18n="certifications.cert2.description">
+                    Nesne Yönelimli Programlama prensiplerinde uzmanlık seviyesine ulaştığınızı gösteren, teknik mülakatlarınızda size avantaj sağlayacak sertifika.
+                </p>
+                <div>
+                    <span class="cert-tag" data-i18n="certifications.cert2.tag1">OOP</span>
+                    <span class="cert-tag" data-i18n="certifications.cert2.tag2">İleri Seviye</span>
+                </div>
+            </div>
+
+            <div class="cert-item" data-aos="fade-up" data-aos-delay="400">
+                <div class="cert-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="cert-title" data-i18n="certifications.cert3.title">Java Developer Rozeti</h3>
+                <p class="cert-description" data-i18n="certifications.cert3.description">
+                    Tüm Java müfredatını başarıyla tamamlayarak tam donanımlı bir Java geliştiricisi olduğunuzu kanıtlayan dijital rozet ve sertifika.
+                </p>
+                <div>
+                    <span class="cert-tag" data-i18n="certifications.cert3.tag1">Full-Stack Java</span>
+                    <span class="cert-tag" data-i18n="certifications.cert3.tag2">Profesyonel</span>
+                </div>
+            </div>
+
+            <div class="cert-item" data-aos="fade-up" data-aos-delay="500">
+                <div class="cert-icon">
+                    <i class="fas fa-star"></i>
+                </div>
+                <h3 class="cert-title" data-i18n="certifications.cert4.title">Endüstri Hazırlık Belgesi</h3>
+                <p class="cert-description" data-i18n="certifications.cert4.description">
+                    Endüstri standartlarında Java projeleri geliştirebilme yetkinliğinizi belgeleyen, işe alım süreçlerinde sizi öne çıkaracak profesyonel sertifika.
+                </p>
+                <div>
+                    <span class="cert-tag" data-i18n="certifications.cert4.tag1">Enterprise Java</span>
+                    <span class="cert-tag" data-i18n="certifications.cert4.tag2">İşe Hazırlık</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Learning Steps Section - Enhanced -->
+<section class="steps-section" id="steps">
+    <div class="container">
+        <div class="section-heading">
+            <h2 class="section-title" data-aos="fade-up" data-i18n="steps.title">JavaPro Öğrenme Metodolojisi</h2>
+            <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100" data-i18n="steps.subtitle">
+                Bilimsel öğrenme prensipleri temel alınarak tasarlanmış, verimliliği kanıtlanmış metodolojimizle Java öğrenmek hiç bu kadar etkili olmamıştı.
+            </p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6" data-aos="fade-right" data-aos-delay="200">
+                <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3 data-i18n="steps.step1.title">Kavramsal Öğrenme</h3>
+                        <p data-i18n="steps.step1.description">Görsellerle zenginleştirilmiş ve anlaşılır içerikle Java temellerini ve OOP kavramlarını derinlemesine öğrenin.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6" data-aos="fade-left" data-aos-delay="300">
+                <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3 data-i18n="steps.step2.title">Uygulamalı Kodlama</h3>
+                        <p data-i18n="steps.step2.description">Entegre kod editörü ile öğrendiklerinizi anında pratik yapın ve gerçek dünya senaryolarında uygulayın.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6" data-aos="fade-right" data-aos-delay="400">
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3 data-i18n="steps.step3.title">Akıllı Test Sistemi</h3>
+                        <p data-i18n="steps.step3.description">Adaptif algoritmalar kullanan test sistemiyle bilgi düzeyinizi ölçün ve eksik noktalarınızı tespit edin.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6" data-aos="fade-left" data-aos-delay="500">
+                <div class="step-item">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3 data-i18n="steps.step4.title">Mentörlük & Geri Bildirim</h3>
+                        <p data-i18n="steps.step4.description">Endüstri tecrübesi olan yazılımcılardan birebir mentörlük alın ve kodunuz için profesyonel geri bildirim edinin.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section - Enhanced -->
+<section class="stats-section" id="stats">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <div class="stat-number" data-count="75">0</div>
+                    <div class="stat-label" data-i18n="stats.stat1">Profesyonel Modül</div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="stat-number" data-count="350">0</div>
+                    <div class="stat-label" data-i18n="stats.stat2">Pratik Kod Örneği</div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="300">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="stat-number" data-count="500">0</div>
+                    <div class="stat-label" data-i18n="stats.stat3">Sertifikasyon Sorusu</div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-6" data-aos="fade-up" data-aos-delay="400">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="stat-number" data-count="10000">0</div>
+                    <div class="stat-label" data-i18n="stats.stat4">Mezun Öğrenci</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer - Enhanced -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-5">
+                <div class="footer-brand">
+                    <i class="fab fa-java"></i> JavaPro <span class="fw-light">Akademi</span>
+                </div>
+                <p class="footer-description" data-i18n="footer.description">
+                    Java ve nesne yönelimli programlama (OOP) becerilerinizi profesyonel seviyeye taşıyacak, interaktif içeriklere sahip ve sektör ihtiyaçlarına yönelik hazırlanmış kapsamlı bir eğitim platformu.
+                </p>
+                <div class="social-links">
+                    <a class="social-link" href="#" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a class="social-link" href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <a class="social-link" href="#" title="X (Twitter)"><i class="fab fa-x-twitter"></i></a>
+                    <a class="social-link" href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a class="social-link" href="#" title="Discord"><i class="fab fa-discord"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-4 mb-4">
+                <h4 class="footer-heading" data-i18n="footer.platform">Platform</h4>
+                <ul class="footer-links">
+                    <li><a data-i18n="footer.home" href="/">Ana Sayfa</a></li>
+                    <li><a data-i18n="footer.topics" href="/topics">Konular</a></li>
+                    <li><a data-i18n="footer.quiz" href="/quiz">Quiz</a></li>
+                    <li><a href="/forum">Forum</a></li>
+                    <li><a data-i18n="footer.progress" href="/progress">İlerleme</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-2 col-md-4 mb-4">
+                <h4 class="footer-heading" data-i18n="footer.topics">Eğitimler</h4>
+                <ul class="footer-links">
+                    <li><a data-i18n="footer.javaBasics" href="/topics/basics">Java Temelleri</a></li>
+                    <li><a data-i18n="footer.oopConcepts" href="/topics/oop">OOP Kavramları</a></li>
+                    <li><a data-i18n="footer.javaMethods" href="/topics/methods">Java Collections</a></li>
+                    <li><a href="/topics/spring-boot">Spring Boot</a></li>
+                    <li><a href="/topics/microservices">Mikroservisler</a></li>
+                    <li><a data-i18n="footer.oopExamples" href="/topics/examples">Projeler</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-4 mb-4">
+                <h4 class="footer-heading" data-i18n="footer.contact">İletişim</h4>
+                <ul class="footer-links">
+                    <li><a href="mailto:info@javaproacademy.com"><i class="fas fa-envelope me-2"></i> info@javaproacademy.com</a></li>
+                    <li><a href="tel:+902123456789"><i class="fas fa-phone me-2"></i> +90 (212) 345 67 89</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt me-2"></i> Maslak, İstanbul, Türkiye</a></li>
+                    <li><a href="#"><i class="fab fa-github me-2"></i> GitHub</a></li>
+                    <li><a href="#"><i class="fab fa-linkedin me-2"></i> LinkedIn</a></li>
+                    <li><a href="#"><i class="fab fa-x-twitter me-2"></i> X (Twitter)</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 JavaPro Akademi | <span data-i18n="footer.developedBy">Geliştiren:</span> JavaPro Tech</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Tema Değiştirici -->
+<div class="theme-switcher">
+    <div class="theme-option theme-blue" data-theme="blue" title="Mavi Tema">
+        <i class="fas fa-palette"></i>
+    </div>
+    <div class="theme-option theme-pink" data-theme="pink" title="Pembe Tema">
+        <i class="fas fa-palette"></i>
+    </div>
+    <div class="theme-option theme-javapro active" data-theme="javapro" title="Pro Tema">
+        <i class="fas fa-palette"></i>
+    </div>
+    <div class="theme-option theme-dark-btn" data-theme="dark" title="Karanlık Tema">
+        <i class="fas fa-moon"></i>
+    </div>
+</div>
+
+<!-- Login Modal -->
+<div aria-hidden="true" aria-labelledby="loginModalLabel" class="modal fade login-modal" id="loginModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="loginModalLabel"><i class="fab fa-java"></i> JavaPro Akademi - <span
+                        data-i18n="login.title">Giriş</span></h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body">
+                <form class="login-form">
+                    <div class="mb-3">
+                        <label class="form-label" data-i18n="login.email" for="email">E-posta Adresi</label>
+                        <input class="form-control" id="email" placeholder="ornek@mail.com" type="email">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" data-i18n="login.password" for="password">Şifre</label>
+                        <input class="form-control" data-i18n-placeholder="login.passwordPlaceholder" id="password"
+                               placeholder="Şifreniz" type="password">
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input class="form-check-input" id="rememberMe" type="checkbox">
+                        <label class="form-check-label" data-i18n="login.rememberMe" for="rememberMe">Beni
+                            hatırla</label>
+                    </div>
+                    <button class="btn btn-login" data-i18n="login.signIn" type="submit">Giriş Yap</button>
+                </form>
+
+                <div class="login-divider">
+                    <span data-i18n="login.or">VEYA</span>
+                </div>
+
+                <div class="social-login">
+                    <a class="social-btn btn-google" href="#">
+                        <i class="fab fa-google"></i> <span data-i18n="login.googleSignIn">Google ile Giriş</span>
+                    </a>
+                    <a class="social-btn btn-github" href="#">
+                        <i class="fab fa-github"></i> <span data-i18n="login.githubSignIn">GitHub ile Giriş</span>
+                    </a>
+                </div>
+
+                <div class="login-footer">
+                    <p><span data-i18n="login.noAccount">Hesabınız yok mu?</span> <a data-i18n="login.register"
+                                                                                     href="/register">Şimdi
+                        Kayıt Olun</a></p>
+                    <p><a data-i18n="login.forgotPassword" href="/forgot-password">Şifremi Unuttum</a></p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<footer class="bg-light text-center py-3 mt-5">
-    <div class="container">
-        <p class="text-muted">&copy; 2024 Java OOP Öğrenim Platformu</p>
-    </div>
-</footer>
-
+<!-- JS Dependencies -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+<!-- Çoklu Dil Desteği - i18n Script -->
+<script>
+    // i18n çevirileri
+    const translations = {
+        'tr': {
+            'loader': {
+                'text': 'JavaPro Akademi Yükleniyor...'
+            },
+            'navbar': {
+                'home': 'Ana Sayfa',
+                'topics': 'Konular',
+                'quiz': 'Quiz',
+                'progress': 'İlerleme',
+                'login': 'Giriş'
+            },
+            'hero': {
+                'title': 'JavaPro Akademi',
+                'subtitle': 'Profesyonel Java Geliştiricisi Olmanın En Etkili Yolu',
+                'description': 'JavaPro Akademi, Java programlama dilini ve nesne yönelimli programlama (OOP) kavramlarını en modern ve interaktif yöntemlerle öğrenmenizi sağlayan kapsamlı bir eğitim platformudur. Sektör deneyimli uzmanlar tarafından hazırlanan içeriklerle, teorik bilgiyi pratik uygulamalarla pekiştirin.',
+                'startLearning': 'Öğrenmeye Başla'
+            },
+            'features': {
+                'title': 'Neler Öğreneceksiniz?',
+                'subtitle': 'Kapsamlı içerik, uygulamalı örnekler ve interaktif testlerle Java programlama ve OOP dünyasında uzmanlaşın. Modern yazılım geliştirme pratikleriyle endüstri standardında kod yazmayı öğrenin.',
+                'explore': 'Keşfet',
+                'card1': {
+                    'title': 'Java Temelleri',
+                    'text': 'Syntax, veri tipleri, operatörler, kontrol yapıları, döngüler, diziler ve koleksiyonlar hakkında kapsamlı bilgi edinirken, temel algoritma mantığını güçlendirin.'
+                },
+                'card2': {
+                    'title': 'OOP Kavramları',
+                    'text': 'Nesne yönelimli programlamanın temel taşları olan sınıflar, nesneler, kalıtım, polimorfizm, kapsülleme ve arayüzleri uygulamalı olarak öğrenin.'
+                },
+                'card3': {
+                    'title': 'İleri Java & Projeler',
+                    'text': 'Gerçek dünya uygulamaları ile öğrendiklerinizi pratiğe dökün. Sektörde kullanılan modern Java uygulamaları geliştirmeyi ve çözüm odaklı düşünmeyi öğrenin.'
+                }
+            },
+            'testimonials': {
+                'title': 'Öğrencilerimizin Deneyimleri',
+                'subtitle': 'JavaPro Akademi\'nin eğitim metodolojisi ve içeriği hakkında mezunlarımızın gerçek başarı hikayeleri.',
+                'testimonial1': '"JavaPro Akademi ile Java öğrenmek çok farklı bir deneyim oldu. Özellikle pratik-ağırlıklı yaklaşımları ve gerçek projelerle çalışma imkanı sunmaları beni yazılım kariyerimde bir adım öne çıkardı. 3 aylık eğitim sürecinin sonunda bir yazılım firmasında işe başladım!"',
+                'testimonial2': '"Daha önce birçok online kursu denedim, ancak hiçbiri JavaPro Akademi kadar kapsamlı ve interaktif değildi. Adım adım ilerleyen müfredat ve canlı mentörlük seansları sayesinde zorlandığım konuları hızla aştım. Şimdi kendi projelerimde Java ve Spring Boot kullanıyorum."',
+                'testimonial3': '"Üniversitedeki teorik Java derslerini anlamakta zorlanıyordum. JavaPro Akademi\'nin görsel ve uygulamalı yaklaşımı sayesinde not ortalamam yükseldi ve staj döneminde diğer adaylardan bir adım öne çıktım. Akademik başarımın yanında iş dünyasına hazır hissediyorum."',
+                'author1': {
+                    'name': 'Ayşe Yılmaz',
+                    'title': 'Jr. Backend Developer @ TechSoft'
+                },
+                'author2': {
+                    'name': 'Mehmet Kaya',
+                    'title': 'Fullstack Developer'
+                },
+                'author3': {
+                    'name': 'Zeynep Demir',
+                    'title': 'Bilgisayar Müh. Öğrencisi'
+                }
+            },
+            'certifications': {
+                'title': 'Sertifikalar ve Başarı Rozetleri',
+                'subtitle': 'JavaPro Akademi\'de edindiğiniz becerileri belgeleyen ve kariyer yolculuğunuzda sizi öne çıkaracak endüstri onaylı sertifikalar kazanın.',
+                'popular': 'POPÜLER',
+                'cert1': {
+                    'title': 'Java Temel Sertifikası',
+                    'description': 'Java programlama dilinin temel yapılarını ve kullanımını başarıyla öğrendiğinizi belgeleyen, CV\'nizde fark yaratacak sertifika.',
+                    'tag1': 'Core Java',
+                    'tag2': 'Temel Seviye'
+                },
+                'cert2': {
+                    'title': 'OOP Uzman Sertifikası',
+                    'description': 'Nesne Yönelimli Programlama prensiplerinde uzmanlık seviyesine ulaştığınızı gösteren, teknik mülakatlarınızda size avantaj sağlayacak sertifika.',
+                    'tag1': 'OOP',
+                    'tag2': 'İleri Seviye'
+                },
+                'cert3': {
+                    'title': 'Java Developer Rozeti',
+                    'description': 'Tüm Java müfredatını başarıyla tamamlayarak tam donanımlı bir Java geliştiricisi olduğunuzu kanıtlayan dijital rozet ve sertifika.',
+                    'tag1': 'Full-Stack Java',
+                    'tag2': 'Profesyonel'
+                },
+                'cert4': {
+                    'title': 'Endüstri Hazırlık Belgesi',
+                    'description': 'Endüstri standartlarında Java projeleri geliştirebilme yetkinliğinizi belgeleyen, işe alım süreçlerinde sizi öne çıkaracak profesyonel sertifika.',
+                    'tag1': 'Enterprise Java',
+                    'tag2': 'İşe Hazırlık'
+                }
+            },
+            'steps': {
+                'title': 'JavaPro Öğrenme Metodolojisi',
+                'subtitle': 'Bilimsel öğrenme prensipleri temel alınarak tasarlanmış, verimliliği kanıtlanmış metodolojimizle Java öğrenmek hiç bu kadar etkili olmamıştı.',
+                'step1': {
+                    'title': 'Kavramsal Öğrenme',
+                    'description': 'Görsellerle zenginleştirilmiş ve anlaşılır içerikle Java temellerini ve OOP kavramlarını derinlemesine öğrenin.'
+                },
+                'step2': {
+                    'title': 'Uygulamalı Kodlama',
+                    'description': 'Entegre kod editörü ile öğrendiklerinizi anında pratik yapın ve gerçek dünya senaryolarında uygulayın.'
+                },
+                'step3': {
+                    'title': 'Akıllı Test Sistemi',
+                    'description': 'Adaptif algoritmalar kullanan test sistemiyle bilgi düzeyinizi ölçün ve eksik noktalarınızı tespit edin.'
+                },
+                'step4': {
+                    'title': 'Mentörlük & Geri Bildirim',
+                    'description': 'Endüstri tecrübesi olan yazılımcılardan birebir mentörlük alın ve kodunuz için profesyonel geri bildirim edinin.'
+                }
+            },
+            'stats': {
+                'stat1': 'Profesyonel Modül',
+                'stat2': 'Pratik Kod Örneği',
+                'stat3': 'Sertifikasyon Sorusu',
+                'stat4': 'Mezun Öğrenci'
+            },
+            'footer': {
+                'description': 'Java ve nesne yönelimli programlama (OOP) becerilerinizi profesyonel seviyeye taşıyacak, interaktif içeriklere sahip ve sektör ihtiyaçlarına yönelik hazırlanmış kapsamlı bir eğitim platformu.',
+                'platform': 'Platform',
+                'topics': 'Eğitimler',
+                'contact': 'İletişim',
+                'home': 'Ana Sayfa',
+                'progress': 'İlerleme',
+                'quiz': 'Quiz',
+                'javaBasics': 'Java Temelleri',
+                'oopConcepts': 'OOP Kavramları',
+                'javaMethods': 'Java Collections',
+                'oopExamples': 'Projeler',
+                'developedBy': 'Geliştiren:'
+            },
+            'login': {
+                'title': 'Giriş',
+                'email': 'E-posta Adresi',
+                'password': 'Şifre',
+                'passwordPlaceholder': 'Şifreniz',
+                'rememberMe': 'Beni hatırla',
+                'signIn': 'Giriş Yap',
+                'or': 'VEYA',
+                'googleSignIn': 'Google ile Giriş',
+                'githubSignIn': 'GitHub ile Giriş',
+                'noAccount': 'Hesabınız yok mu?',
+                'register': 'Şimdi Kayıt Olun',
+                'forgotPassword': 'Şifremi Unuttum'
+            }
+        },
+        'en': {
+            'loader': {
+                'text': 'JavaPro Academy Loading...'
+            },
+            'navbar': {
+                'home': 'Home',
+                'topics': 'Topics',
+                'quiz': 'Quiz',
+                'progress': 'Progress',
+                'login': 'Login'
+            },
+            'hero': {
+                'title': 'JavaPro Academy',
+                'subtitle': 'The Most Effective Way to Become a Professional Java Developer',
+                'description': 'JavaPro Academy is a comprehensive educational platform that enables you to learn Java programming language and object-oriented programming (OOP) concepts with the most modern and interactive methods. Reinforce theoretical knowledge with practical applications through content prepared by industry-experienced experts.',
+                'startLearning': 'Start Learning'
+            },
+            'features': {
+                'title': 'What Will You Learn?',
+                'subtitle': 'Gain expertise in Java programming and the OOP world with comprehensive content, practical examples, and interactive tests. Learn to write industry-standard code with modern software development practices.',
+                'explore': 'Explore',
+                'card1': {
+                    'title': 'Java Foundations',
+                    'text': 'Strengthen your fundamental algorithm logic while gaining comprehensive knowledge about syntax, data types, operators, control structures, loops, arrays, and collections.'
+                },
+                'card2': {
+                    'title': 'OOP Concepts',
+                    'text': 'Learn the core building blocks of object-oriented programming – classes, objects, inheritance, polymorphism, encapsulation, and interfaces – through practical applications.'
+                },
+                'card3': {
+                    'title': 'Advanced Java & Projects',
+                    'text': 'Put what you\'ve learned into practice with real-world applications. Learn to develop modern Java applications used in the industry and think solution-oriented.'
+                }
+            },
+            'testimonials': {
+                'title': 'Student Experiences',
+                'subtitle': 'Real success stories from our graduates about JavaPro Academy\'s educational methodology and content.',
+                'testimonial1': '"Learning Java with JavaPro Academy was a completely different experience. Their practice-oriented approach and opportunity to work with real projects gave me an edge in my software career. After 3 months of training, I started working at a software company!"',
+                'testimonial2': '"I\'ve tried many online courses before, but none were as comprehensive and interactive as JavaPro Academy. Thanks to the step-by-step curriculum and live mentoring sessions, I quickly overcame challenging topics. Now I use Java and Spring Boot in my own projects."',
+                'testimonial3': '"I was struggling to understand theoretical Java classes at university. Thanks to JavaPro Academy\'s visual and practical approach, my GPA improved and I stood out among other candidates during my internship period. Besides academic success, I feel ready for the business world."',
+                'author1': {
+                    'name': 'Jane Smith',
+                    'title': 'Jr. Backend Developer @ TechSoft'
+                },
+                'author2': {
+                    'name': 'John Miller',
+                    'title': 'Fullstack Developer'
+                },
+                'author3': {
+                    'name': 'Emily Davis',
+                    'title': 'Computer Science Student'
+                }
+            },
+            'certifications': {
+                'title': 'Certificates and Achievement Badges',
+                'subtitle': 'Earn industry-approved certificates that document the skills you\'ve acquired at JavaPro Academy and make you stand out in your career journey.',
+                'popular': 'POPULAR',
+                'cert1': {
+                    'title': 'Java Fundamentals Certificate',
+                    'description': 'A certificate documenting that you have successfully learned the basic structures and usage of the Java programming language, making a difference on your resume.',
+                    'tag1': 'Core Java',
+                    'tag2': 'Beginner Level'
+                },
+                'cert2': {
+                    'title': 'OOP Expert Certificate',
+                    'description': 'A certificate showing that you have reached expert level in Object-Oriented Programming principles, giving you an advantage in your technical interviews.',
+                    'tag1': 'OOP',
+                    'tag2': 'Advanced Level'
+                },
+                'cert3': {
+                    'title': 'Java Developer Badge',
+                    'description': 'A digital badge and certificate proving that you have successfully completed the entire Java curriculum and are a fully-equipped Java developer.',
+                    'tag1': 'Full-Stack Java',
+                    'tag2': 'Professional'
+                },
+                'cert4': {
+                    'title': 'Industry Readiness Certificate',
+                    'description': 'A professional certificate documenting your competency in developing Java projects to industry standards, making you stand out in hiring processes.',
+                    'tag1': 'Enterprise Java',
+                    'tag2': 'Job Ready'
+                }
+            },
+            'steps': {
+                'title': 'JavaPro Learning Methodology',
+                'subtitle': 'Learning Java has never been as effective as with our methodology, designed based on scientific learning principles and proven efficiency.',
+                'step1': {
+                    'title': 'Conceptual Learning',
+                    'description': 'Learn Java basics and OOP concepts in depth with visually enriched and easy-to-understand content.'
+                },
+                'step2': {
+                    'title': 'Practical Coding',
+                    'description': 'Instantly practice what you learn with the integrated code editor and apply it in real-world scenarios.'
+                },
+                'step3': {
+                    'title': 'Smart Testing System',
+                    'description': 'Measure your knowledge level and identify your weak points with a testing system using adaptive algorithms.'
+                },
+                'step4': {
+                    'title': 'Mentorship & Feedback',
+                    'description': 'Receive one-on-one mentoring from industry-experienced developers and get professional feedback on your code.'
+                }
+            },
+            'stats': {
+                'stat1': 'Professional Modules',
+                'stat2': 'Practical Code Examples',
+                'stat3': 'Certification Questions',
+                'stat4': 'Graduate Students'
+            },
+            'footer': {
+                'description': 'A comprehensive educational platform with interactive content designed for industry needs that will elevate your Java and object-oriented programming (OOP) skills to a professional level.',
+                'platform': 'Platform',
+                'topics': 'Courses',
+                'contact': 'Contact',
+                'home': 'Home',
+                'progress': 'Progress',
+                'quiz': 'Quiz',
+                'javaBasics': 'Java Foundations',
+                'oopConcepts': 'OOP Concepts',
+                'javaMethods': 'Java Collections',
+                'oopExamples': 'Projects',
+                'developedBy': 'Developed by:'
+            },
+            'login': {
+                'title': 'Login',
+                'email': 'Email Address',
+                'password': 'Password',
+                'passwordPlaceholder': 'Your password',
+                'rememberMe': 'Remember me',
+                'signIn': 'Sign In',
+                'or': 'OR',
+                'googleSignIn': 'Sign in with Google',
+                'githubSignIn': 'Sign in with GitHub',
+                'noAccount': 'Don\'t have an account?',
+                'register': 'Register Now',
+                'forgotPassword': 'Forgot Password'
+            }
+        }
+    };
+
+    // Dil değiştirme işlevi
+    function changeLanguage(lang) {
+        // HTML lang özelliğini güncelle
+        document.documentElement.setAttribute('lang', lang);
+
+        // Tüm i18n etiketlerini çevir
+        const elements = document.querySelectorAll('[data-i18n]');
+        elements.forEach(element => {
+            const keys = element.getAttribute('data-i18n').split('.');
+            let text = translations[lang];
+
+            // Nested object içinden değeri al
+            for (const key of keys) {
+                if (text) text = text[key];
+            }
+
+            if (text) element.textContent = text;
+        });
+
+        // Placeholder'ları çevir
+        const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
+        placeholders.forEach(element => {
+            const keys = element.getAttribute('data-i18n-placeholder').split('.');
+            let text = translations[lang];
+
+            // Nested object içinden değeri al
+            for (const key of keys) {
+                if (text) text = text[key];
+            }
+
+            if (text) element.setAttribute('placeholder', text);
+        });
+
+        // Aktif dil butonunu güncelle
+        document.querySelectorAll('.language-option').forEach(option => {
+            if (option.getAttribute('data-lang') === lang) {
+                option.classList.add('active');
+            } else {
+                option.classList.remove('active');
+            }
+        });
+
+        // Dil tercihini localStorage'a kaydet
+        localStorage.setItem('preferredLanguage', lang);
+    }
+
+    // Sayfa yükleme animasyonu
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            document.querySelector('.page-loader').classList.add('fade-out');
+        }, 1000);
+    });
+
+    // Parçacık animasyonu
+    document.addEventListener('DOMContentLoaded', function() {
+        // Kayıtlı dil tercihini kontrol et
+        const savedLanguage = localStorage.getItem('preferredLanguage') || 'tr';
+        changeLanguage(savedLanguage);
+
+        // Dil değiştirme olayı dinleyicileri
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+            });
+        });
+
+        // AOS animasyon başlatma
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: false,
+            mirror: true,
+            offset: 100
+        });
+
+        // Particles.js başlatma
+        if (document.getElementById('particles-js')) {
+            particlesJS('particles-js', {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": "#ffffff"
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.3,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": true,
+                            "speed": 2,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": "#ffffff",
+                        "opacity": 0.2,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 1,
+                        "direction": "none",
+                        "random": true,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
+            });
+        }
+
+        // Scroll progress göstergesi
+        window.addEventListener('scroll', function() {
+            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (scrollTop / scrollHeight) * 100;
+
+            document.querySelector('.scroll-progress-bar').style.width = scrolled + '%';
+
+            // Navbar scroll efekti
+            if (scrollTop > 50) {
+                document.querySelector('.navbar').classList.add('scrolled');
+            } else {
+                document.querySelector('.navbar').classList.remove('scrolled');
+            }
+
+            // Back to top button
+            if (scrollTop > 300) {
+                document.querySelector('.back-to-top').classList.add('visible');
+            } else {
+                document.querySelector('.back-to-top').classList.remove('visible');
+            }
+        });
+
+        // Back to top button click event
+        document.querySelector('.back-to-top').addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // Floating Button Toggle
+        const floatingButton = document.getElementById('floatingButton');
+        if (floatingButton) {
+            floatingButton.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        }
+
+        // İstatistik animasyonu
+        const statNumbers = document.querySelectorAll('.stat-number');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateValue(entry.target);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statNumbers.forEach(number => {
+            observer.observe(number);
+        });
+
+        function animateValue(element) {
+            const text = element.textContent;
+            // Don't animate "24/7"
+            if (text === "24/7") return;
+
+            const value = parseInt(element.getAttribute('data-count')) || 0;
+            let duration = 2000;
+
+            const startValue = 0;
+            const startTimestamp = performance.now();
+
+            function step(timestamp) {
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const currentValue = Math.floor(progress * (value - startValue) + startValue);
+                element.textContent = currentValue + "+";
+
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            }
+
+            window.requestAnimationFrame(step);
+        }
+
+        // Kod editör animasyonu
+        function animateCode() {
+            const lines = document.querySelectorAll('.code-line');
+            const activeLine = document.querySelector('.active-line');
+            const typing = document.querySelector('.typing');
+
+            if (lines.length && activeLine) {
+                // Tüm active-line sınıfını kaldır
+                lines.forEach(line => line.classList.remove('active-line'));
+
+                // Aktif satır indeksini artır
+                let currentLine = parseInt(activeLine.querySelector('.line-number')?.textContent) || 17;
+                currentLine = (currentLine % 23) + 1; // 1-23 arası döngü
+
+                // Yeni aktif satır
+                const newActiveLine = document.querySelector(`.code-line:nth-child(${currentLine})`);
+                if (newActiveLine) {
+                    newActiveLine.classList.add('active-line');
+                }
+
+                // Yazma animasyonu için rastgele bir satır seç (typing class'ına sahip olan)
+                const typingLine = document.querySelector('.typing');
+                if (typingLine) {
+                    const allLines = document.querySelectorAll('.code-line');
+                    const randomIndex = Math.floor(Math.random() * allLines.length);
+                    const randomLine = allLines[randomIndex];
+
+                    // Typing animasyonunu yeni satıra taşı
+                    typingLine.classList.remove('typing');
+                    randomLine.classList.add('typing');
+                }
+            }
+        }
+
+        // Her 5 saniyede bir kod animasyonunu güncelle
+        setInterval(animateCode, 5000);
+
+        // Tema değiştirici
+        const themeOptions = document.querySelectorAll('.theme-option');
+
+        // Kayıtlı temayı kontrol et, yoksa JavaPro'yu varsayılan yap
+        const savedTheme = localStorage.getItem('preferredTheme') || 'javapro';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+
+        // Aktif düğmeyi güncelle
+        themeOptions.forEach(option => {
+            option.classList.remove('active');
+            if (option.getAttribute('data-theme') === savedTheme) {
+                option.classList.add('active');
+            }
+        });
+
+        // Tema değiştirme olayı dinleyicileri
+        themeOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const theme = this.getAttribute('data-theme');
+
+                // Temayı uygula
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('preferredTheme', theme);
+
+                // Aktif düğmeyi güncelle
+                themeOptions.forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                this.classList.add('active');
+            });
+        });
+
+        // Highlight.js - kod vurgulamasını başlat
+        document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+        });
+    });
+</script>
 </body>
 </html>
