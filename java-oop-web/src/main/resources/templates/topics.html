@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html data-theme="javapro" lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title th:text="${title}">Java Konuları</title>
+    <meta content="JavaPro Akademi - Java konuları ve kaynakları"
+          name="description">
+    <meta content="Java, OOP, programlama, eğitim, JavaPro, Akademi" name="keywords">
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+          rel="stylesheet">
+    <!-- AOS - Animate On Scroll kütüphanesi -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <!-- Highlight.js - Kod vurgulama kütüphanesi -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/tokyo-night-dark.min.css"
+          rel="stylesheet">
+    <style>
+        /* Stiller buraya kopyalanabilir */
+        :root {
+            /* JavaPro teması */
+            --primary: #2c3e50;
+            --primary-dark: #1a2530;
+            --secondary: #e74c3c;
+            --dark: #2E2E3A;
+            --success: #27ae60;
+            --info: #3498db;
+            --warning: #f39c12;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --background: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Navbar stil */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            margin: 0 10px;
+            padding: 10px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+        }
+
+        .nav-link:before {
+            content: "";
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover:before, .nav-link.active:before {
+            width: 100%;
+        }
+
+        /* Badge stili */
+        .pro-badge {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+            vertical-align: middle;
+            font-weight: 700;
+        }
+
+        /* Dil seçici stil */
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+
+        .language-option {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 3px 8px;
+            border-radius: 15px;
+            margin: 0 3px;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .language-option:hover {
+            transform: translateY(-3px);
+        }
+
+        .language-option.active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .language-option img {
+            width: 18px;
+            height: 18px;
+            margin-right: 5px;
+            border-radius: 50%;
+        }
+
+        /* Bildirim zili stil */
+        .notification-bell {
+            margin-left: 20px;
+            position: relative;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        .notification-bell:hover {
+            color: white;
+        }
+
+        .notification-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--secondary);
+            color: white;
+            font-size: 0.65rem;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 600;
+        }
+
+        /* Başlık stilim */
+        .page-header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 80px 0 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .page-title {
+            font-weight: 700;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .page-subtitle {
+            font-weight: 400;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        /* Konu kartları stilleri */
+        .topic-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            height: 100%;
+            border: none;
+            position: relative;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .topic-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .topic-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            font-size: 2.2rem;
+        }
+
+        .topic-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .topic-level {
+            display: inline-block;
+            padding: 5px 15px;
+            background: var(--secondary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-top: 10px;
+        }
+
+        .topic-body {
+            padding: 25px;
+        }
+
+        .topic-description {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .topic-tags {
+            margin-bottom: 20px;
+        }
+
+        .topic-tag {
+            display: inline-block;
+            padding: 5px 10px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+            background: #f5f7fa;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            color: var(--primary);
+        }
+
+        .subtopics-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .subtopics-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .subtopics-list li:last-child {
+            border-bottom: none;
+        }
+
+        .subtopics-list a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: block;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .subtopics-list a:before {
+            content: '\f0da';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+        }
+
+        .subtopics-list a:hover {
+            color: var(--secondary);
+            transform: translateX(5px);
+        }
+
+        /* Footer stil */
+        .footer {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 50px 0 20px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .footer-heading {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-heading:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--secondary);
+        }
+
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin-right: 10px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: var(--secondary);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive stil */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            .topic-card {
+                margin-bottom: 30px;
+            }
+        }
+
+        /* Sayfa animasyonu */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Topic renkleri */
+        .topic-beginners {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+        }
+
+        .topic-intermediate {
+            background: linear-gradient(135deg, #2196F3, #0D47A1);
+        }
+
+        .topic-advanced {
+            background: linear-gradient(135deg, #673AB7, #311B92);
+        }
+
+        /* Buton stil */
+        .btn-topic {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .btn-topic:hover {
+            background: #c0392b;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fab fa-java"></i> JavaPro <span class="fw-light">Akademi</span>
+        </a>
+        <button class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="search-box ms-auto me-3 d-none d-lg-block">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="" aria-label="Arama">
+            </div>
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" data-i18n="navbar.home" href="/">Ana Sayfa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" data-i18n="navbar.topics" href="/topics">Konular</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-i18n="navbar.quiz" href="/quiz">Quiz</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/forum">Forum <span class="pro-badge">YENİ</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-i18n="navbar.progress" href="/progress">İlerleme</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-light rounded-pill px-3 py-2" data-bs-target="#loginModal" data-bs-toggle="modal" href="#">
+                        <i class="fas fa-user me-1"></i> <span data-i18n="navbar.login">Giriş</span>
+                    </a>
+                </li>
+                <!-- Dil seçici taşındı -->
+                <li class="nav-item language-switcher">
+                    <div class="language-option active" data-lang="tr">
+                        <img alt="Türkçe"
+                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDgwMCI+PHBhdGggZmlsbD0iI2UzMGExNyIgZD0iTTAgMGgxMjAwdjgwMEgweiIvPjxjaXJjbGUgY3g9IjQyNSIgY3k9IjQwMCIgcj0iMjAwIiBmaWxsPSIjZmZmIi8+PGNpcmNsZSBjeD0iNDc1IiBjeT0iNDAwIiByPSIxNjAiIGZpbGw9IiNlMzBhMTciLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJtNTgzLjMzNCAzNDAgMS4zOTkgNDIuOTM0IDM4LjY1MS0xOS4yNDctMjQuNzAyIDM2LjMwMyAzOS42MTctMTguMjAyLTQxLjkwMSAxMC42OTcgMjQuMTUyIDM2LjYyOC00MS43ODktMTEuMjQ5LjI4NSA0My4yMjQtMjYuMjA1LTM1LjMxNS0yNS40NzkgMzUuODI2LjI4NC00My4yMjQtNDEuNzg5IDExLjI0OSAyNC4xNTMtMzYuNjI4LTQxLjkwMS0xMC42OTcgMzkuNjE3IDE4LjIwMi0yNC43MDItMzYuMzAzIDM4LjY1MSAxOS4yNDcgMS4zOTktNDIuOTM0eiIvPjwvc3ZnPg==">
+                        TR
+                    </div>
+                    <div class="language-option" data-lang="en">
+                        <img alt="English"
+                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjM1IDY1MCIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgo8ZGVmcz4KPGc+CjxnIGlkPSJ1bmlvbiI+PHBhdGggZD0iTTAsMCBMNTAsMCBMNTAsMzAgTDAsMzAiIGlkPSJ4MUYiIGZpbGw9IiNiZjAwMzQiLz48cGF0aCBkPSJNMCwwIEw1MCwwIEw1MCwzMCBMMCwzMCIgaWQ9IngyRiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik0wLDAgTDUwLDAgTDUwLDMwIEwwLDMwIiBpZD0ieDNGIiBmaWxsPSIjMDAyZDc3Ii8+PC9nPgo8L2c+CjwvZGVmcz4KCjxwYXRoIGQ9Ik0wLDAgTDEyMzUsMCBMMTIzNSw2NTAgTDAsNjUwIHoiIGZpbGw9IiNmZmZmZmYiLz4KPHVzZSB4bGluazpocmVmPSIjeDNGIiB5PSI0MCIvPgo8dXNlIHhsaW5rOmhyZWY9IiN4MkYiIHk9IjcwIi8+Cjx1c2UgeGxpbms6aHJlZj0iIyMzRiIgeT0iMTAwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMTMwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iMTYwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMTkwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iMjIwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMjUwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iMjgwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMzEwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iMzQwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMzcwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iNDAwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iNDMwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iNDYwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iNDkwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iNTIwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iNTUwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iNTgwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iNjEwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gxRiIgd2lkdGg9IjQ5NCIgaGVpZ2h0PSIzNTAiLz4KPHBhdGggc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEwMCIgZD0iTTAsMCBMNDk0LDM1MCIgLz4KPHBhdGggc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEwMCIgZD0iTTAsMzUwIEw0OTQsMCIgLz4KPC9zdmc+Cg==">
+                        EN
+                    </div>
+                </li>
+                <li class="nav-item notification-bell d-none d-lg-block">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">3</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Page Header -->
+<header class="page-header fade-in">
+    <div class="container">
+        <h1 class="page-title" data-i18n="topics.pageTitle">Java Konuları</h1>
+        <p class="page-subtitle" data-i18n="topics.pageSubtitle">Başlangıç seviyesinden ileri seviyeye kadar Java'nın tüm kavramlarını detaylı olarak keşfedin.</p>
+    </div>
+</header>
+
+<!-- Topics Section -->
+<section class="topics-section py-5 fade-in" style="animation-delay: 0.2s;">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Topic Card (Tekrarlanan) -->
+            <div class="col-lg-4 col-md-6" th:each="topic : ${topics}">
+                <div class="topic-card">
+                    <div class="topic-header" th:classappend="${topic.level == 'Başlangıç' ? 'topic-beginners' : (topic.level == 'Orta' ? 'topic-intermediate' : 'topic-advanced')}">
+                        <div class="topic-icon">
+                            <i class="fas" th:classappend="${topic.iconClass}"></i>
+                        </div>
+                        <h3 class="topic-title" th:text="${topic.title}" data-topic-title>Java Temelleri</h3>
+                        <span class="topic-level" th:text="${topic.level}" data-i18n-level>Başlangıç</span>
+                    </div>
+                    <div class="topic-body">
+                        <p class="topic-description" th:text="${topic.description}" data-topic-description>
+                            Java dilinin temel yapıtaşları ve sözdizimi
+                        </p>
+                        <div class="topic-tags">
+                            <span class="topic-tag" th:each="tag : ${topic.tags}" th:text="${tag}" data-topic-tag>Temel</span>
+                        </div>
+                        <h4 data-i18n="topics.subtopicsTitle">Alt Konular:</h4>
+                        <ul class="subtopics-list">
+                            <li th:each="subtopic : ${topic.subtopics}">
+                                <a th:href="@{'/topics/' + ${topic.id} + '#subtopic-' + ${subtopic.id}}" th:text="${subtopic.title}" data-subtopic-title>
+                                    Java'ya Giriş
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="text-center mt-4">
+                            <a class="btn-topic" th:href="@{'/topics/' + ${topic.id}}">
+                                <span data-i18n="topics.viewDetails">Detayları Gör</span> <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h4 class="footer-heading" data-i18n="footer.academy">JavaPro Akademi</h4>
+                <p data-i18n="footer.description">Java ve nesne yönelimli programlama konularında kapsamlı bir eğitim platformu. Kariyerinizi bir adım ileri taşıyın.</p>
+                <div class="social-icons mt-4">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 mb-4">
+                <h4 class="footer-heading" data-i18n="footer.platform">Platform</h4>
+                <ul class="footer-links">
+                    <li><a data-i18n="footer.home" href="/">Ana Sayfa</a></li>
+                    <li><a data-i18n="footer.topics" href="/topics">Konular</a></li>
+                    <li><a data-i18n="footer.quiz" href="/quiz">Quiz</a></li>
+                    <li><a href="/forum">Forum</a></li>
+                    <li><a data-i18n="footer.progress" href="/progress">İlerleme</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-md-4 mb-4">
+                <h4 class="footer-heading" data-i18n="footer.resources">Kaynaklar</h4>
+                <ul class="footer-links">
+                    <li><a href="/resources" data-i18n="footer.documentation">Dokümantasyon</a></li>
+                    <li><a href="/examples" data-i18n="footer.examples">Örnekler</a></li>
+                    <li><a href="/guides" data-i18n="footer.guides">Rehberler</a></li>
+                    <li><a href="/videos" data-i18n="footer.videos">Videolar</a></li>
+                    <li><a href="/projects" data-i18n="footer.projects">Projeler</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h4 class="footer-heading" data-i18n="footer.contact">İletişim</h4>
+                <p data-i18n="footer.contactText">Sorularınız mı var? Bizimle iletişime geçin.</p>
+                <form class="mt-4">
+                    <div class="input-group mb-3">
+                        <input class="form-control" data-i18n-placeholder="footer.emailPlaceholder" placeholder="E-posta adresiniz" type="email">
+                        <button class="btn btn-primary" type="submit" data-i18n="footer.subscribe">Abone Ol</button>
+                    </div>
+                </form>
+                <p class="small" data-i18n="footer.stayUpdated">Güncellemelerden haberdar olmak için abone olun.</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p data-i18n="footer.copyright">&copy; 2025 JavaPro Akademi. Tüm hakları saklıdır.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+<script>
+    // i18n çevirileri
+    const translations = {
+        'tr': {
+            'navbar': {
+                'home': 'Ana Sayfa',
+                'topics': 'Konular',
+                'quiz': 'Quiz',
+                'progress': 'İlerleme',
+                'login': 'Giriş'
+            },
+            'topics': {
+                'pageTitle': 'Java Konuları',
+                'pageSubtitle': 'Başlangıç seviyesinden ileri seviyeye kadar Java\'nın tüm kavramlarını detaylı olarak keşfedin.',
+                'subtopicsTitle': 'Alt Konular:',
+                'viewDetails': 'Detayları Gör',
+                'levels': {
+                    'beginner': 'Başlangıç',
+                    'intermediate': 'Orta',
+                    'advanced': 'İleri'
+                },
+                'cards': {
+                    'fundamentals': 'Java Temelleri',
+                    'oop': 'Nesne Yönelimli Programlama',
+                    'advanced': 'İleri Java Konuları'
+                }
+            },
+            'footer': {
+                'academy': 'JavaPro Akademi',
+                'description': 'Java ve nesne yönelimli programlama konularında kapsamlı bir eğitim platformu. Kariyerinizi bir adım ileri taşıyın.',
+                'platform': 'Platform',
+                'resources': 'Kaynaklar',
+                'contact': 'İletişim',
+                'home': 'Ana Sayfa',
+                'topics': 'Konular',
+                'quiz': 'Quiz',
+                'progress': 'İlerleme',
+                'documentation': 'Dokümantasyon',
+                'examples': 'Örnekler',
+                'guides': 'Rehberler',
+                'videos': 'Videolar',
+                'projects': 'Projeler',
+                'contactText': 'Sorularınız mı var? Bizimle iletişime geçin.',
+                'emailPlaceholder': 'E-posta adresiniz',
+                'subscribe': 'Abone Ol',
+                'stayUpdated': 'Güncellemelerden haberdar olmak için abone olun.',
+                'copyright': '© 2023 JavaPro Akademi. Tüm hakları saklıdır.'
+            }
+        },
+        'en': {
+            'navbar': {
+                'home': 'Home',
+                'topics': 'Topics',
+                'quiz': 'Quiz',
+                'progress': 'Progress',
+                'login': 'Login'
+            },
+            'topics': {
+                'pageTitle': 'Java Topics',
+                'pageSubtitle': 'Explore all concepts of Java in detail, from beginner to advanced level.',
+                'subtopicsTitle': 'Subtopics:',
+                'viewDetails': 'View Details',
+                'levels': {
+                    'beginner': 'Beginner',
+                    'intermediate': 'Intermediate',
+                    'advanced': 'Advanced'
+                },
+                'cards': {
+                    'fundamentals': 'Java Fundamentals',
+                    'oop': 'Object-Oriented Programming',
+                    'advanced': 'Advanced Java Topics'
+                }
+            },
+            'footer': {
+                'academy': 'JavaPro Academy',
+                'description': 'A comprehensive educational platform for Java and object-oriented programming. Take your career one step further.',
+                'platform': 'Platform',
+                'resources': 'Resources',
+                'contact': 'Contact',
+                'home': 'Home',
+                'topics': 'Topics',
+                'quiz': 'Quiz',
+                'progress': 'Progress',
+                'documentation': 'Documentation',
+                'examples': 'Examples',
+                'guides': 'Guides',
+                'videos': 'Videos',
+                'projects': 'Projects',
+                'contactText': 'Have questions? Get in touch with us.',
+                'emailPlaceholder': 'Your email address',
+                'subscribe': 'Subscribe',
+                'stayUpdated': 'Subscribe to stay updated with our latest news.',
+                'copyright': '© 2023 JavaPro Academy. All rights reserved.'
+            }
+        }
+    };
+
+            // Sabit terimleri çevirmek için yardımcı fonksiyon
+    function translateTechnicalTerms() {
+        const currentLang = localStorage.getItem('preferredLanguage') || 'tr';
+
+        // Teknolojik terimlerin ve açıklamaların çevirisi
+        const techTerms = {
+            'tr': {
+                'Collections': 'Koleksiyonlar',
+                'Exception Handling': 'Hata Yönetimi',
+                'Exceptions': 'İstisnalar',
+                'Generics': 'Jenerikler',
+                'Java Streams API': 'Java Akış API',
+                'Multithreading': 'Çoklu İşlem',
+                'Alt Konular:': 'Alt Konular:',
+                'Detayları Gör': 'Detayları Gör',
+                'İleri': 'İleri',
+                'Koleksiyonlar, İstisnalar Yönetimi, Jenerikler': 'Koleksiyonlar, İstisnalar Yönetimi, Jenerikler'
+            },
+            'en': {
+                'Koleksiyonlar': 'Collections',
+                'Hata Yönetimi': 'Exception Handling',
+                'İstisnalar': 'Exceptions',
+                'Jenerikler': 'Generics',
+                'Java Akış API': 'Java Streams API',
+                'Çoklu İşlem': 'Multithreading',
+                'Alt Konular:': 'Subtopics:',
+                'Detayları Gör': 'View Details',
+                'View Details': 'Detayları Gör',
+                'İleri': 'Advanced',
+                'Koleksiyonlar, İstisnalar Yönetimi, Jenerikler': 'Collections, Exception Handling, Generics'
+            }
+        };
+
+        // Sabit metinleri çevir
+        document.querySelectorAll('p, h3, h4, span, a').forEach(el => {
+            if (!el.hasAttribute('data-i18n') && !el.hasAttribute('data-i18n-level')) {
+                const text = el.textContent.trim();
+                if (techTerms[currentLang][text]) {
+                    el.textContent = techTerms[currentLang][text];
+                }
+            }
+        });
+
+        // Kart açıklamalarında teknolojik terimleri çevir
+        document.querySelectorAll('.topic-description').forEach(el => {
+            if (el.textContent.includes('Collections, Exception Handling, Generics') && currentLang === 'tr') {
+                el.textContent = 'Koleksiyonlar, İstisnalar Yönetimi, Jenerikler';
+            } else if (el.textContent.includes('Koleksiyonlar, İstisnalar Yönetimi, Jenerikler') && currentLang === 'en') {
+                el.textContent = 'Collections, Exception Handling, Generics';
+            }
+        });
+    }
+
+    // Özel olarak "View Details" düğmelerini çevir
+    function translateViewDetailsButtons(lang) {
+        // Tüm olası düğmeleri seç
+        const buttons = document.querySelectorAll('a, button, .btn, .btn-topic, [class*="view"], [class*="View"], [class*="detail"], [class*="Detail"]');
+
+        buttons.forEach(button => {
+            const text = button.textContent.trim();
+
+            // Düğme metnine göre çevir
+            if ((text === 'View Details' || text.includes('View Detail')) && lang === 'tr') {
+                button.textContent = 'Detayları Gör';
+                button.textContent = 'Detayları Gör'; // İki kez atayarak DOM güncellemesini zorla
+            } else if ((text === 'Detayları Gör' || text.includes('Detaylar')) && lang === 'en') {
+                button.textContent = 'View Details';
+                button.textContent = 'View Details'; // İki kez atayarak DOM güncellemesini zorla
+            }
+        });
+    }
+
+    // Dil değiştirme işlevi
+    function changeLanguage(lang) {
+        // HTML lang özelliğini güncelle
+        document.documentElement.setAttribute('lang', lang);
+
+        // Tüm i18n etiketlerini çevir
+        const elements = document.querySelectorAll('[data-i18n]');
+        elements.forEach(element => {
+            const keys = element.getAttribute('data-i18n').split('.');
+            let text = translations[lang];
+
+            // Nested object içinden değeri al
+            for (const key of keys) {
+                if (text) text = text[key];
+            }
+
+            if (text) element.textContent = text;
+        });
+
+        // Placeholder'ları çevir
+        const placeholders = document.querySelectorAll('[data-i18n-placeholder]');
+        placeholders.forEach(element => {
+            const keys = element.getAttribute('data-i18n-placeholder').split('.');
+            let text = translations[lang];
+
+            // Nested object içinden değeri al
+            for (const key of keys) {
+                if (text) text = text[key];
+            }
+
+            if (text) element.setAttribute('placeholder', text);
+        });
+
+        // Konu seviyelerini çevir (dinamik içerik için özel işlem)
+        document.querySelectorAll('[data-i18n-level]').forEach(el => {
+            const currentLevel = el.textContent.trim();
+
+            // Mevcut seviyeye göre çeviri yap
+            if (currentLevel === 'Başlangıç' || currentLevel === 'Beginner') {
+                el.textContent = translations[lang].topics.levels.beginner;
+            } else if (currentLevel === 'Orta' || currentLevel === 'Intermediate') {
+                el.textContent = translations[lang].topics.levels.intermediate;
+            } else if (currentLevel === 'İleri' || currentLevel === 'Advanced') {
+                el.textContent = translations[lang].topics.levels.advanced;
+            }
+        });
+
+        // Konu başlıklarını çevir
+        if (lang === 'en') {
+            document.querySelectorAll('[data-topic-title]').forEach(el => {
+                // Türkçe başlıkları İngilizce'ye çevir
+                if (el.textContent === 'Java Temelleri') {
+                    el.textContent = 'Java Fundamentals';
+                } else if (el.textContent === 'Nesne Yönelimli Programlama') {
+                    el.textContent = 'Object-Oriented Programming';
+                } else if (el.textContent === 'İleri Java Konuları') {
+                    el.textContent = 'Advanced Java Topics';
+                }
+            });
+
+            // Alt konuları çevir
+            document.querySelectorAll('[data-subtopic-title]').forEach(el => {
+                // Türkçe alt konuları İngilizce'ye çevir
+                const turkishToEnglish = {
+                    'Java\'ya Giriş': 'Introduction to Java',
+                    'Değişkenler ve Veri Tipleri': 'Variables and Data Types',
+                    'Operatörler': 'Operators',
+                    'Kontrol Yapıları': 'Control Structures',
+                    'Diziler': 'Arrays',
+                    'Metotlar': 'Methods',
+                    'Sınıflar ve Nesneler': 'Classes and Objects',
+                    'Kapsülleme': 'Encapsulation',
+                    'Kalıtım': 'Inheritance',
+                    'Çok Biçimlilik': 'Polymorphism',
+                    'Soyutlama': 'Abstraction',
+                    'Koleksiyonlar': 'Collections',
+                    'Hata Yönetimi': 'Exception Handling',
+                    'Generics': 'Generics',
+                    'Java Streams API': 'Java Streams API',
+                    'Multithreading': 'Multithreading'
+                };
+
+                if (turkishToEnglish[el.textContent]) {
+                    el.textContent = turkishToEnglish[el.textContent];
+                }
+            });
+
+            // Konu açıklamalarını çevir
+            document.querySelectorAll('[data-topic-description]').forEach(el => {
+                if (el.textContent.includes('Java dilinin temel yapıtaşları')) {
+                    el.textContent = 'Basic building blocks and syntax of the Java language';
+                } else if (el.textContent.includes('OOP kavramları')) {
+                    el.textContent = 'Object-oriented programming concepts and implementation in Java';
+                } else if (el.textContent.includes('İleri seviye Java')) {
+                    el.textContent = 'Advanced Java concepts, exception handling, and generics';
+                }
+            });
+
+            // Etiketleri çevir
+            document.querySelectorAll('[data-topic-tag]').forEach(el => {
+                const tagTranslations = {
+                    'Temel': 'Basic',
+                    'Java': 'Java',
+                    'Sözdizimi': 'Syntax',
+                    'OOP': 'OOP',
+                    'Sınıflar': 'Classes',
+                    'Nesneler': 'Objects',
+                    'İleri': 'Advanced',
+                    'API': 'API',
+                    'Exception': 'Exception'
+                };
+
+                if (tagTranslations[el.textContent]) {
+                    el.textContent = tagTranslations[el.textContent];
+                }
+            });
+        } else if (lang === 'tr') {
+            // İngilizce başlıkları Türkçe'ye çevir
+            document.querySelectorAll('[data-topic-title]').forEach(el => {
+                if (el.textContent === 'Java Fundamentals') {
+                    el.textContent = 'Java Temelleri';
+                } else if (el.textContent === 'Object-Oriented Programming') {
+                    el.textContent = 'Nesne Yönelimli Programlama';
+                } else if (el.textContent === 'Advanced Java Topics') {
+                    el.textContent = 'İleri Java Konuları';
+                }
+            });
+
+            // Alt konuları çevir
+            document.querySelectorAll('[data-subtopic-title]').forEach(el => {
+                const englishToTurkish = {
+                    'Introduction to Java': 'Java\'ya Giriş',
+                    'Variables and Data Types': 'Değişkenler ve Veri Tipleri',
+                    'Operators': 'Operatörler',
+                    'Control Structures': 'Kontrol Yapıları',
+                    'Arrays': 'Diziler',
+                    'Methods': 'Metotlar',
+                    'Classes and Objects': 'Sınıflar ve Nesneler',
+                    'Encapsulation': 'Kapsülleme',
+                    'Inheritance': 'Kalıtım',
+                    'Polymorphism': 'Çok Biçimlilik',
+                    'Abstraction': 'Soyutlama',
+                    'Collections': 'Koleksiyonlar',
+                    'Exception Handling': 'Hata Yönetimi',
+                    'Exceptions': 'İstisnalar',
+                    'Generics': 'Jenerikler',
+                    'Java Streams API': 'Java Akış API',
+                    'Multithreading': 'Çoklu İşlem'
+                };
+
+                if (englishToTurkish[el.textContent]) {
+                    el.textContent = englishToTurkish[el.textContent];
+                }
+            });
+
+            // Konu açıklamalarını çevir
+            document.querySelectorAll('[data-topic-description]').forEach(el => {
+                if (el.textContent.includes('Basic building blocks')) {
+                    el.textContent = 'Java dilinin temel yapıtaşları ve sözdizimi';
+                } else if (el.textContent.includes('Object-oriented programming concepts')) {
+                    el.textContent = 'OOP kavramları ve Java\'da uygulamaları';
+                } else if (el.textContent.includes('Advanced Java concepts')) {
+                    el.textContent = 'İleri seviye Java konuları, hata yönetimi ve generics';
+                }
+            });
+
+            // Etiketleri çevir
+            document.querySelectorAll('[data-topic-tag]').forEach(el => {
+                const tagTranslations = {
+                    'Basic': 'Temel',
+                    'Java': 'Java',
+                    'Syntax': 'Sözdizimi',
+                    'OOP': 'OOP',
+                    'Classes': 'Sınıflar',
+                    'Objects': 'Nesneler',
+                    'Advanced': 'İleri',
+                    'API': 'API',
+                    'Exception': 'Exception'
+                };
+
+                if (tagTranslations[el.textContent]) {
+                    el.textContent = tagTranslations[el.textContent];
+                }
+            });
+        }
+
+        // Aktif dil butonunu güncelle
+        document.querySelectorAll('.language-option').forEach(option => {
+            if (option.getAttribute('data-lang') === lang) {
+                option.classList.add('active');
+            } else {
+                option.classList.remove('active');
+            }
+        });
+
+        // Dil tercihini localStorage'a kaydet
+        localStorage.setItem('preferredLanguage', lang);
+
+        // Teknolojik terimleri çevir
+        translateTechnicalTerms();
+
+        // View Details düğmelerini çevir
+        setTimeout(() => {
+            translateViewDetailsButtons(lang);
+        }, 100);
+    }
+
+    // AOS başlatma
+    AOS.init({
+        once: true,
+        duration: 800,
+    });
+
+    // Pozisyonları düzeltmek için tüm butonları ve etiketleri standardize et
+    function standardizePositions() {
+        // Level etiketlerini ortala ve alt konumlarını sabit yap
+        const levelTags = document.querySelectorAll('.topic-level');
+        levelTags.forEach(tag => {
+            tag.style.position = 'absolute';
+            tag.style.bottom = '15px';
+            tag.style.left = '50%';
+            tag.style.transform = 'translateX(-50%)';
+        });
+
+        // View Details butonlarını standardize et
+        const viewButtons = document.querySelectorAll('.view-details, [class*="view-details"], [class*="View-details"], .btn-topic');
+        viewButtons.forEach(button => {
+            // Butonun konteynırını pozisyonlandır
+            const buttonParent = button.parentElement;
+            if (buttonParent) {
+                buttonParent.style.position = 'absolute';
+                buttonParent.style.bottom = '20px';
+                buttonParent.style.left = '0';
+                buttonParent.style.width = '100%';
+                buttonParent.style.textAlign = 'center';
+            }
+
+            // Butonun kendisini ortala
+            button.style.width = '150px';
+            button.style.display = 'inline-block';
+        });
+    }
+
+    // Sayfa yükleme işlemi bittikten sonra kartların eşit yükseklikte olmasını sağla
+    function equalizeCardHeaderHeights() {
+        const headers = document.querySelectorAll('.topic-header');
+        // Tüm kartlara eşit yükseklik uygula
+        headers.forEach(header => {
+            header.style.height = '200px';  // Kesin yükseklik ayarı
+        });
+    }
+
+    // Highlight.js başlatma
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // Sayfa yüklendiğinde varsayılan dili ve dil tercihini kontrol et
+        const savedLanguage = localStorage.getItem('preferredLanguage') || 'tr';
+        changeLanguage(savedLanguage);
+
+        // Sayfa yüklendiğinde teknolojik terimleri ve düğmeleri çevir (DOMContentLoaded sonrası)
+        setTimeout(() => {
+            translateTechnicalTerms();
+            translateViewDetailsButtons(savedLanguage);
+        }, 300);
+
+        // Sayfa tamamen yüklendiğinde bir kez daha çeviri yap (görsel öğeler için)
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                translateViewDetailsButtons(savedLanguage);
+                equalizeCardHeaderHeights(); // Kart yüksekliklerini eşitle
+                standardizePositions(); // Buton ve etiket pozisyonlarını standardize et
+            }, 500);
+        });
+
+        // Dil değiştirme olayı dinleyicileri
+        document.querySelectorAll('.language-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const lang = this.getAttribute('data-lang');
+                changeLanguage(lang);
+
+
+                // Ek güvence için biraz bekleyip bir kez daha çeviri yap
+                setTimeout(() => {
+                    translateViewDetailsButtons(lang);
+                    equalizeCardHeaderHeights(); // Kart yüksekliklerini dil değiştikten sonra yeniden eşitle
+                    standardizePositions(); // Pozisyonları standartlaştır
+                }, 300);
+            });
+        });
+
+        document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+        });
+    });
+</script>
+</body>
+</html>

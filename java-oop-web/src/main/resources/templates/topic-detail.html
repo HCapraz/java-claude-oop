@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html data-theme="javapro" lang="tr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title th:text="${title}">Konu Detayları</title>
+    <meta content="JavaPro Akademi - Java konuları ve kaynakları"
+          name="description">
+    <meta content="Java, OOP, programlama, eğitim, JavaPro, Akademi" name="keywords">
+    <link href="/img/favicon.ico" rel="icon" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap"
+          rel="stylesheet">
+    <!-- AOS - Animate On Scroll kütüphanesi -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <!-- Highlight.js - Kod vurgulama kütüphanesi -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/tokyo-night-dark.min.css"
+          rel="stylesheet">
+    <style>
+        /* Stiller buraya kopyalanabilir */
+        :root {
+            /* JavaPro teması */
+            --primary: #2c3e50;
+            --primary-dark: #1a2530;
+            --secondary: #e74c3c;
+            --dark: #2E2E3A;
+            --success: #27ae60;
+            --info: #3498db;
+            --warning: #f39c12;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --background: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.7;
+            color: var(--text-primary);
+            overflow-x: hidden;
+        }
+
+        /* Navbar stil */
+        .navbar {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 15px 0;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            margin: 0 10px;
+            padding: 10px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: white !important;
+        }
+
+        .nav-link:before {
+            content: "";
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover:before, .nav-link.active:before {
+            width: 100%;
+        }
+        
+        /* Badge stili */
+        .pro-badge {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-left: 5px;
+            vertical-align: middle;
+            font-weight: 700;
+        }
+        
+        /* Dil seçici stil */
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+        
+        .language-option {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 3px 8px;
+            border-radius: 15px;
+            margin: 0 3px;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .language-option:hover {
+            transform: translateY(-3px);
+        }
+        
+        .language-option.active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .language-option img {
+            width: 18px;
+            height: 18px;
+            margin-right: 5px;
+            border-radius: 50%;
+        }
+        
+        /* Bildirim zili stil */
+        .notification-bell {
+            margin-left: 20px;
+            position: relative;
+            cursor: pointer;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+        
+        .notification-bell:hover {
+            color: white;
+        }
+        
+        .notification-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--secondary);
+            color: white;
+            font-size: 0.65rem;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-weight: 600;
+        }
+
+        /* Başlık stil */
+        .topic-header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 100px 0 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .topic-header h1 {
+            font-weight: 700;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .topic-icon-large {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            font-size: 3rem;
+        }
+
+        .topic-description {
+            font-weight: 400;
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        .topic-meta {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .topic-level {
+            display: inline-block;
+            padding: 5px 15px;
+            background: var(--secondary);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin: 0 5px;
+        }
+
+        .topic-tag {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 0 5px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            font-size: 0.8rem;
+        }
+
+        /* Sidebar stil */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 25px;
+        }
+
+        .sidebar-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .subtopic-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .subtopic-nav li {
+            margin-bottom: 10px;
+        }
+
+        .subtopic-nav a {
+            display: block;
+            padding: 10px 15px;
+            color: var(--text-primary);
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .subtopic-nav a:before {
+            content: '\f0da';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 10px;
+            color: var(--secondary);
+        }
+
+        .subtopic-nav a:hover, .subtopic-nav a.active {
+            background: #f5f7fa;
+            color: var(--secondary);
+            transform: translateX(5px);
+        }
+
+        /* Alt konu bölümü */
+        .subtopic-section {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .subtopic-title {
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+            color: var(--primary);
+        }
+
+        .subtopic-content {
+            margin-bottom: 25px;
+            line-height: 1.8;
+        }
+
+        /* Kod örneği stil */
+        .code-example {
+            background: #1a1a1a;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .code-header {
+            background: #2a2a2a;
+            padding: 10px 15px;
+            color: white;
+            font-size: 0.9rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .code-window-controls {
+            display: flex;
+        }
+
+        .code-window-control {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .code-window-close {
+            background: #ff5f56;
+        }
+
+        .code-window-minimize {
+            background: #ffbd2e;
+        }
+
+        .code-window-maximize {
+            background: #27c93f;
+        }
+
+        .code-actions {
+            display: flex;
+        }
+
+        .code-action {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .code-action:hover {
+            color: white;
+        }
+
+        .code-content {
+            padding: 15px;
+            overflow-x: auto;
+        }
+
+        pre {
+            margin: 0;
+            padding: 0;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Gezinme butonları */
+        .navigation-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 50px;
+        }
+
+        .btn-prev, .btn-next {
+            display: inline-block;
+            padding: 10px 20px;
+            background: var(--primary);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-prev:hover, .btn-next:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            color: white;
+        }
+
+        .btn-prev i, .btn-next i {
+            transition: transform 0.3s ease;
+        }
+
+        .btn-prev:hover i {
+            transform: translateX(-5px);
+        }
+
+        .btn-next:hover i {
+            transform: translateX(5px);
+        }
+
+        /* Footer stil */
+        .footer {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 50px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .footer-heading {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-heading:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--secondary);
+        }
+
+        .social-icons a {
+            width: 40px;
+            height: 40px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            margin-right: 10px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            background: var(--secondary);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sayfa animasyonu */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Responsive stil */
+        @media (max-width: 768px) {
+            .topic-header h1 {
+                font-size: 2rem;
+            }
+            .sidebar {
+                position: static;
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            <i class="fab fa-java"></i> JavaPro <span class="fw-light">Akademi</span>
+        </a>
+        <button class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="search-box ms-auto me-3 d-none d-lg-block">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="" aria-label="Arama">
+            </div>
+            <ul class="navbar-nav align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link" data-i18n="navbar.home" href="/">Ana Sayfa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" data-i18n="navbar.topics" href="/topics">Konular</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-i18n="navbar.quiz" href="/quiz">Quiz</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/forum">Forum <span class="pro-badge">YENİ</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-i18n="navbar.progress" href="/progress">İlerleme</a>
+                </li>
+                <li class="nav-item">
+                    <a class="btn btn-light rounded-pill px-3 py-2" data-bs-target="#loginModal" data-bs-toggle="modal" href="#">
+                        <i class="fas fa-user me-1"></i> <span data-i18n="navbar.login">Giriş</span>
+                    </a>
+                </li>
+                <!-- Dil seçici taşındı -->
+                <li class="nav-item language-switcher">
+                    <div class="language-option active" data-lang="tr">
+                        <img alt="Türkçe"
+                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAwIDgwMCI+PHBhdGggZmlsbD0iI2UzMGExNyIgZD0iTTAgMGgxMjAwdjgwMEgweiIvPjxjaXJjbGUgY3g9IjQyNSIgY3k9IjQwMCIgcj0iMjAwIiBmaWxsPSIjZmZmIi8+PGNpcmNsZSBjeD0iNDc1IiBjeT0iNDAwIiByPSIxNjAiIGZpbGw9IiNlMzBhMTciLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJtNTgzLjMzNCAzNDAgMS4zOTkgNDIuOTM0IDM4LjY1MS0xOS4yNDctMjQuNzAyIDM2LjMwMyAzOS42MTctMTguMjAyLTQxLjkwMSAxMC42OTcgMjQuMTUyIDM2LjYyOC00MS43ODktMTEuMjQ5LjI4NSA0My4yMjQtMjYuMjA1LTM1LjMxNS0yNS40NzkgMzUuODI2LjI4NC00My4yMjQtNDEuNzg5IDExLjI0OSAyNC4xNTMtMzYuNjI4LTQxLjkwMS0xMC42OTcgMzkuNjE3IDE4LjIwMi0yNC43MDItMzYuMzAzIDM4LjY1MSAxOS4yNDcgMS4zOTktNDIuOTM0eiIvPjwvc3ZnPg==">
+                        TR
+                    </div>
+                    <div class="language-option" data-lang="en">
+                        <img alt="English"
+                             src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjM1IDY1MCIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgo8ZGVmcz4KPGc+CjxnIGlkPSJ1bmlvbiI+PHBhdGggZD0iTTAsMCBMNTAsMCBMNTAsMzAgTDAsMzAiIGlkPSJ4MUYiIGZpbGw9IiNiZjAwMzQiLz48cGF0aCBkPSJNMCwwIEw1MCwwIEw1MCwzMCBMMCwzMCIgaWQ9IngyRiIgZmlsbD0iI2ZmZmZmZiIvPjxwYXRoIGQ9Ik0wLDAgTDUwLDAgTDUwLDMwIEwwLDMwIiBpZD0ieDNGIiBmaWxsPSIjMDAyZDc3Ii8+PC9nPgo8L2c+CjwvZGVmcz4KCjxwYXRoIGQ9Ik0wLDAgTDEyMzUsMCBMMTIzNSw2NTAgTDAsNjUwIHoiIGZpbGw9IiNmZmZmZmYiLz4KPHVzZSB4bGluazpocmVmPSIjeDNGIiB5PSI0MCIvPgo8dXNlIHhsaW5rOmhyZWY9IiN4MkYiIHk9IjcwIi8+Cjx1c2UgeGxpbms6aHJlZj0iIyMzRiIgeT0iMTAwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMTMwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iMTYwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMTkwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iMjIwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMjUwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iMjgwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMzEwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iMzQwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iMzcwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iNDAwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iNDMwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iNDYwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iNDkwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iNTIwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iNTUwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gzRiIgeT0iNTgwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gyRiIgeT0iNjEwIi8+Cjx1c2UgeGxpbms6aHJlZj0iI3gxRiIgd2lkdGg9IjQ5NCIgaGVpZ2h0PSIzNTAiLz4KPHBhdGggc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEwMCIgZD0iTTAsMCBMNDk0LDM1MCIgLz4KPHBhdGggc3Ryb2tlPSIjZmZmZmZmIiBzdHJva2Utd2lkdGg9IjEwMCIgZD0iTTAsMzUwIEw0OTQsMCIgLz4KPC9zdmc+Cg==">
+                        EN
+                    </div>
+                </li>
+                <li class="nav-item notification-bell d-none d-lg-block">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">3</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Topic Header -->
+<header class="topic-header fade-in">
+    <div class="container">
+        <div class="topic-icon-large">
+            <i class="fas" th:classappend="${topic.iconClass}"></i>
+        </div>
+        <h1 th:text="${topic.title}">Java Temelleri</h1>
+        <p class="topic-description" th:text="${topic.description}">
+            Java dilinin temel yapıtaşları ve sözdizimi
+        </p>
+        <div class="topic-meta">
+            <span class="topic-level" th:text="${topic.level}">Başlangıç</span>
+            <span class="topic-tag" th:each="tag : ${topic.tags}" th:text="${tag}">Temel</span>
+        </div>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container fade-in" style="animation-delay: 0.2s;">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <div class="sidebar">
+                <h3 class="sidebar-title">İçindekiler</h3>
+                <ul class="subtopic-nav">
+                    <li th:each="subtopic : ${topic.subtopics}">
+                        <a th:href="'#subtopic-' + ${subtopic.id}" th:text="${subtopic.title}">Java'ya Giriş</a>
+                    </li>
+                </ul>
+                <div class="d-grid gap-2 mt-4">
+                    <a href="/topics" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-arrow-left me-2"></i> Tüm Konular
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="col-lg-9">
+            <!-- Subtopic Sections -->
+            <div class="subtopic-section" th:each="subtopic : ${topic.subtopics}" th:id="'subtopic-' + ${subtopic.id}">
+                <h2 class="subtopic-title" th:text="${subtopic.title}">Java'ya Giriş</h2>
+                <div class="subtopic-content" th:text="${subtopic.content}">
+                    Java, Sun Microsystems tarafından 1995 yılında geliştirilmiş, platform bağımsız, nesne yönelimli bir programlama dilidir. 'Write Once, Run Anywhere' (Bir kere yaz, her yerde çalıştır) prensibiyle tanınır.
+                </div>
+
+                <!-- Code Example -->
+                <div class="code-example" th:each="example : ${subtopic.examples}">
+                    <div class="code-header">
+                        <div class="code-window-controls">
+                            <div class="code-window-control code-window-close"></div>
+                            <div class="code-window-control code-window-minimize"></div>
+                            <div class="code-window-control code-window-maximize"></div>
+                        </div>
+                        <span>Örnek Kod</span>
+                        <div class="code-actions">
+                            <button class="code-action" onclick="copyCode(this)" title="Kopyala">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="code-content">
+                        <pre><code class="java" th:text="${example}">// Basit bir Java programı
+public class HelloWorld {
+    public static void main(String[] args) {
+        System.out.println("Merhaba, Dünya!");
+    }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="navigation-buttons">
+                <a href="/topics" class="btn-prev">
+                    <i class="fas fa-arrow-left me-2"></i> Tüm Konular
+                </a>
+                <a href="#" class="btn-next" onclick="alert('Quiz hazırlanıyor...'); return false;">
+                    Quiz'e Başla <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h4 class="footer-heading">JavaPro Akademi</h4>
+                <p>Java ve nesne yönelimli programlama konularında kapsamlı bir eğitim platformu. Kariyerinizi bir adım ileri taşıyın.</p>
+                <div class="social-icons mt-4">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-4 mb-4">
+                <h4 class="footer-heading" data-i18n="footer.platform">Platform</h4>
+                <ul class="footer-links">
+                    <li><a data-i18n="footer.home" href="/">Ana Sayfa</a></li>
+                    <li><a data-i18n="footer.topics" href="/topics">Konular</a></li>
+                    <li><a data-i18n="footer.quiz" href="/quiz">Quiz</a></li>
+                    <li><a href="/forum">Forum</a></li>
+                    <li><a data-i18n="footer.progress" href="/progress">İlerleme</a></li>
+                    <li><a href="/blog">Blog</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-md-4 mb-4">
+                <h4 class="footer-heading">Kaynaklar</h4>
+                <ul class="footer-links">
+                    <li><a href="/resources">Dokümantasyon</a></li>
+                    <li><a href="/examples">Örnekler</a></li>
+                    <li><a href="/guides">Rehberler</a></li>
+                    <li><a href="/videos">Videolar</a></li>
+                    <li><a href="/projects">Projeler</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h4 class="footer-heading">İletişim</h4>
+                <p>Sorularınız mı var? Bizimle iletişime geçin.</p>
+                <form class="mt-4">
+                    <div class="input-group mb-3">
+                        <input class="form-control" placeholder="E-posta adresiniz" type="email">
+                        <button class="btn btn-primary" type="submit">Abone Ol</button>
+                    </div>
+                </form>
+                <p class="small">Güncellemelerden haberdar olmak için abone olun.</p>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 JavaPro Akademi. Tüm hakları saklıdır.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+
+<script>
+    // AOS başlatma
+    AOS.init({
+        once: true,
+        duration: 800,
+    });
+
+    // Highlight.js başlatma
+    document.addEventListener('DOMContentLoaded', (event) => {
+        document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightBlock(block);
+        });
+    });
+
+    // Kod kopyalama fonksiyonu
+    function copyCode(button) {
+        const codeBlock = button.closest('.code-example').querySelector('code');
+        const textArea = document.createElement('textarea');
+        textArea.value = codeBlock.textContent;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        // Kopyalama işlemi geri bildirimi
+        const originalIcon = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-check"></i>';
+        setTimeout(() => {
+            button.innerHTML = originalIcon;
+        }, 2000);
+    }
+
+    // Düzgün kaydırma fonksiyonu
+    document.querySelectorAll('.subtopic-nav a').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+            
+            window.scrollTo({
+                top: targetElement.offsetTop - 100,
+                behavior: 'smooth'
+            });
+            
+            // Aktif bağlantıyı vurgulama
+            document.querySelectorAll('.subtopic-nav a').forEach(a => a.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+
+    // Sayfa yüklendiğinde ilk bağlantıyı aktif etme
+    document.addEventListener('DOMContentLoaded', () => {
+        const firstNavLink = document.querySelector('.subtopic-nav a');
+        if (firstNavLink) {
+            firstNavLink.classList.add('active');
+        }
+    });
+</script>
+</body>
+</html>
